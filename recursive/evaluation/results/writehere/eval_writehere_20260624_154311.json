@@ -1,0 +1,290 @@
+{
+  "evaluation_id": "eval_writehere_20260624_154311",
+  "agent_type": "writehere",
+  "evaluation_timestamp": "2026-06-24T15:49:39.539458",
+  "total_steps_evaluated": 117,
+  "llm_call_accuracy": 50.0,
+  "tool_call_accuracy": 0.0,
+  "parameter_format_accuracy": 100.0,
+  "response_parse_accuracy": 50.0,
+  "total_trajectories": 154,
+  "avg_trajectory_duration_ms": 0.0,
+  "avg_steps_per_trajectory": 0.7597402597402597,
+  "trajectory_success_rate": 43.506493506493506,
+  "avg_rationality_score": 67.40259740259741,
+  "avg_efficiency_score": 75.97402597402598,
+  "overall_step_level_score": 45.0,
+  "overall_trajectory_level_score": 70.83116883116884,
+  "trajectories": [],
+  "detailed_report": {
+    "summary": {
+      "total_steps": 117,
+      "total_trajectories": 154,
+      "llm_calls": 116,
+      "tool_calls": 1
+    },
+    "step_distribution": {
+      "llm_call": 116,
+      "tool_call": 1,
+      "planning": 0,
+      "execution": 0,
+      "memory_read": 0,
+      "memory_write": 0,
+      "other": 0
+    },
+    "performance_metrics": {
+      "avg_duration_ms": 0.0,
+      "max_duration_ms": 0,
+      "min_duration_ms": 0
+    },
+    "error_analysis": {
+      "llm_errors": [
+        {
+          "step_id": "step_79f0de8c",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_d4bb9b41",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_3a99fcaf",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_c4204efc",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_e6dc5e54",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_590846cd",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_8b7d3e00",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_8bf6022b",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_6875e3bf",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_20045701",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_1e5bfccb",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_1829609c",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_3cfb4129",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_53f9c3c4",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_f282f417",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_c083b36b",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_e68c06f6",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_6b5b1125",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_f07f00f7",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_8e92fd50",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_8347fc4c",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_a53ae85f",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_6d9b7f8a",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_18fbdebd",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_9dd4a510",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_0a79cfde",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_690604cb",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_b2187ece",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_7d254f3c",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_b9b96a05",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_984e1647",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_442b872d",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_6fdb4b26",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_e8924283",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_3fcd5efe",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_045c178d",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_8cabd253",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_b28b30d3",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_c9128ead",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_a08acc71",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_6da3f8bc",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_32141dd4",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_f485e4db",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_03426296",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_a7911717",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_52340ecc",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_efdcb3f5",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_c220a9c7",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_c63217b7",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_7a1b5998",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_f2a01031",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_424bfe9c",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_9f453339",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_b6183ef3",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_acc6e5e5",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_8163c90d",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_0f079e1f",
+          "error": "No result returned"
+        },
+        {
+          "step_id": "step_960d3a1b",
+          "error": "No result returned"
+        }
+      ],
+      "tool_errors": []
+    }
+  },
+  "identified_issues": [
+    "LLM 调用准确率较低：50.0%",
+    "工具调用准确率较低：0.0%",
+    "轨迹成功率较低：43.5%",
+    "轨迹合理性得分较低：67.4"
+  ],
+  "improvement_suggestions": [
+    "检查 LLM 调用的参数设置和 prompt 格式",
+    "验证工具调用的参数格式和错误处理逻辑",
+    "分析失败轨迹的共同特征，优化错误恢复机制",
+    "审查执行流程，减少不必要的步骤和重试"
+  ]
+}
