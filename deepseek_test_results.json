@@ -1,0 +1,61 @@
+{
+  "timestamp": "2026-06-22T15:01:37.568944",
+  "results": [
+    [
+      true,
+      true,
+      true,
+      true
+    ],
+    [
+      true,
+      true,
+      true,
+      true
+    ],
+    [
+      true,
+      true,
+      true,
+      true
+    ],
+    [
+      true,
+      true,
+      true,
+      true
+    ],
+    [
+      true,
+      true,
+      true,
+      true
+    ]
+  ],
+  "test_cases": [
+    [
+      "Write a short story about a robot learning to paint.",
+      "en"
+    ],
+    [
+      "写一篇关于机器人学画画的短篇故事。",
+      "zh"
+    ],
+    [
+      "Design characters for a wuxia novel set in ancient China.",
+      "en"
+    ],
+    [
+      "设计一个武侠小说的人物设定，背景是古代中国。",
+      "zh"
+    ]
+  ],
+  "summary": {
+    "total": 20,
+    "passed": 20,
+    "failed": 0,
+    "success_rate": 100.0,
+    "english_success_rate": 100.0,
+    "chinese_success_rate": 100.0
+  }
+}
