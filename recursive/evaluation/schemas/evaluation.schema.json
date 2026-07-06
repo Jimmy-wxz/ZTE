@@ -1,0 +1,383 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/evaluation.schema.json",
+  "title": "Agent Evaluation Result",
+  "description": "企业文档生产 Agent 评估结果的数据格式定义",
+  "type": "object",
+  "required": [
+    "evaluation_id",
+    "agent_type",
+    "evaluation_timestamp",
+    "overall_step_level_score",
+    "overall_trajectory_level_score"
+  ],
+  "properties": {
+    "evaluation_id": {
+      "type": "string",
+      "description": "评估会话的唯一标识符",
+      "pattern": "^eval_[a-z]+_\\d{8}_\\d{6}$"
+    },
+    "agent_type": {
+      "type": "string",
+      "enum": ["writehere", "mo_shen"],
+      "description": "被评估的 Agent 类型"
+    },
+    "evaluation_timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "评估时间戳（ISO 8601 格式）"
+    },
+    "total_steps_evaluated": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "评估的步骤总数"
+    },
+    "llm_call_accuracy": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "LLM 调用准确率（百分比）"
+    },
+    "tool_call_accuracy": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "工具调用准确率（百分比）"
+    },
+    "parameter_format_accuracy": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "参数格式准确率（百分比）"
+    },
+    "response_parse_accuracy": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "响应解析准确率（百分比）"
+    },
+    "total_trajectories": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "轨迹总数"
+    },
+    "avg_trajectory_duration_ms": {
+      "type": "number",
+      "minimum": 0,
+      "description": "平均轨迹耗时（毫秒）"
+    },
+    "avg_steps_per_trajectory": {
+      "type": "number",
+      "minimum": 0,
+      "description": "每条轨迹的平均步骤数"
+    },
+    "trajectory_success_rate": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "轨迹成功率（百分比）"
+    },
+    "avg_rationality_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "平均合理性得分"
+    },
+    "avg_efficiency_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "平均效率得分"
+    },
+    "overall_step_level_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "单步级别综合得分"
+    },
+    "overall_trajectory_level_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "轨迹级别综合得分"
+    },
+    "trajectories": {
+      "type": "array",
+      "description": "所有轨迹的详细记录",
+      "items": {
+        "$ref": "#/$defs/trajectory"
+      }
+    },
+    "detailed_report": {
+      "type": "object",
+      "description": "详细分析报告",
+      "properties": {
+        "summary": {
+          "type": "object",
+          "properties": {
+            "total_steps": {"type": "integer"},
+            "total_trajectories": {"type": "integer"},
+            "llm_calls": {"type": "integer"},
+            "tool_calls": {"type": "integer"}
+          }
+        },
+        "step_distribution": {
+          "type": "object",
+          "additionalProperties": {"type": "integer"}
+        },
+        "performance_metrics": {
+          "type": "object",
+          "properties": {
+            "avg_duration_ms": {"type": "number"},
+            "max_duration_ms": {"type": "number"},
+            "min_duration_ms": {"type": "number"}
+          }
+        },
+        "error_analysis": {
+          "type": "object",
+          "properties": {
+            "llm_errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "step_id": {"type": "string"},
+                  "error": {"type": "string"}
+                }
+              }
+            },
+            "tool_errors": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "step_id": {"type": "string"},
+                  "error": {"type": "string"}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "identified_issues": {
+      "type": "array",
+      "description": "识别出的问题列表",
+      "items": {
+        "type": "string"
+      }
+    },
+    "improvement_suggestions": {
+      "type": "array",
+      "description": "改进建议列表",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "trajectory": {
+      "type": "object",
+      "required": [
+        "trajectory_id",
+        "task_id",
+        "agent_type",
+        "start_time",
+        "status"
+      ],
+      "properties": {
+        "trajectory_id": {
+          "type": "string",
+          "description": "轨迹的唯一标识符"
+        },
+        "task_id": {
+          "type": "string",
+          "description": "关联的任务 ID"
+        },
+        "agent_type": {
+          "type": "string",
+          "enum": ["writehere", "mo_shen"]
+        },
+        "start_time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "end_time": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "in_progress", "completed", "failed", "timeout"]
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/step"
+          }
+        },
+        "total_duration_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "num_llm_calls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "num_tool_calls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "num_steps": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "avg_step_duration_ms": {
+          "type": "number",
+          "minimum": 0
+        },
+        "longest_step_id": {
+          "type": "string"
+        },
+        "shortest_step_id": {
+          "type": "string"
+        },
+        "success_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "avg_correctness_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "avg_efficiency_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "trajectory_rationality_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "trajectory_efficiency_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "task_description": {
+          "type": "string"
+        },
+        "expected_output": {
+          "type": "string"
+        },
+        "actual_output": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object"
+        }
+      }
+    },
+    "step": {
+      "type": "object",
+      "required": [
+        "step_id",
+        "timestamp_start",
+        "timestamp_end",
+        "duration_ms",
+        "agent_type",
+        "step_type",
+        "step_name"
+      ],
+      "properties": {
+        "step_id": {
+          "type": "string"
+        },
+        "timestamp_start": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "timestamp_end": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "agent_type": {
+          "type": "string",
+          "enum": ["writehere", "mo_shen"]
+        },
+        "step_type": {
+          "type": "string",
+          "enum": [
+            "llm_call",
+            "tool_call",
+            "planning",
+            "execution",
+            "memory_read",
+            "memory_write",
+            "other"
+          ]
+        },
+        "step_name": {
+          "type": "string"
+        },
+        "parent_task_id": {
+          "type": ["string", "null"]
+        },
+        "llm_details": {
+          "type": ["object", "null"],
+          "properties": {
+            "model_name": {"type": "string"},
+            "prompt_tokens": {"type": "integer"},
+            "completion_tokens": {"type": "integer"},
+            "total_tokens": {"type": "integer"},
+            "temperature": {"type": "number"},
+            "max_tokens": {"type": ["integer", "null"]},
+            "top_p": {"type": ["number", "null"]},
+            "stop_sequences": {
+              "type": ["array", "null"],
+              "items": {"type": "string"}
+            },
+            "response_format": {"type": ["string", "null"]},
+            "prompt_format_correct": {"type": "boolean"},
+            "parameters_valid": {"type": "boolean"},
+            "response_parsed_successfully": {"type": "boolean"},
+            "error_message": {"type": ["string", "null"]}
+          }
+        },
+        "tool_details": {
+          "type": ["object", "null"],
+          "properties": {
+            "tool_name": {"type": "string"},
+            "tool_type": {"type": "string"},
+            "input_parameters": {"type": "object"},
+            "output_result": {"type": ["string", "null"]},
+            "parameters_format_correct": {"type": "boolean"},
+            "tool_execution_successful": {"type": "boolean"},
+            "output_format_valid": {"type": "boolean"},
+            "error_message": {"type": ["string", "null"]}
+          }
+        },
+        "correctness_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "efficiency_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "metadata": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}
