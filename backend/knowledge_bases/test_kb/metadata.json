@@ -1,0 +1,11 @@
+{
+  "name": "test_kb",
+  "created_at": "2026-06-29T14:08:08.243589",
+  "updated_at": "2026-06-29T14:10:05.733279",
+  "files": [
+    "sample.txt"
+  ],
+  "chunk_count": 1,
+  "status": "ready",
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2"
+}
