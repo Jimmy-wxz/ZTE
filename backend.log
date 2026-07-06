@@ -1,0 +1,1317 @@
+Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+Error loading result file for story-9296ed96-f1b5-4508-9185-8f543a7f5bf9: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-cbe20174-ed4d-4de7-a6d4-35ad316b24ed: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-082aef7a-a051-4089-b900-d96ac2df0ed7: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-80e1bb47-370d-44a2-bd2e-e30fee528a61: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-6abef63a-754b-4ba7-ba76-9e0207c66880: Expecting value: line 1 column 1 (char 0)
+Error loading result file for report-4cc26910-cfe5-4dd5-8949-9d88727b9ec9: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-1b159108-25c8-40fb-bde1-2c8078703592: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-c7a7185b-9d8f-41f9-8b48-94bad21a8378: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-f20969cb-8ec7-4f69-bea2-bdd547c39137: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-4ebc0c3a-4e3b-45f2-9286-c66104b8bc52: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-c5563b2b-7b0d-434a-8058-4477e4a3cd06: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-077fd464-da72-47a1-960b-865b0f688363: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-07d98018-e1f5-4c6a-9a37-5c2f55fa3208: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-6c43cb75-5c01-4d7e-aa23-d7702ac829b5: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-0d74fe96-6ce4-49c2-9685-a60ae3eccb06: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-3434df11-9fd8-49ef-80f7-c1e75f5e1379: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-226f0584-b90b-41a4-afb8-f25ab80ecbf7: Expecting value: line 1 column 1 (char 0)
+ * Serving Flask app 'server' (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: on
+ * Running on all addresses.
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://10.68.27.51:5001/ (Press CTRL+C to quit)
+ * Restarting with stat
+Werkzeug appears to be used in a production deployment. Consider switching to a production web server instead.
+ * Debugger is active!
+ * Debugger PIN: 777-904-035
+127.0.0.1 - - [23/Jun/2026 08:40:48] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:11] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:11] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:11] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:11] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:11] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:11] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:14] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:14] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:14] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:14] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:14] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:41:14] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "OPTIONS /api/generate-report HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "POST /api/generate-report HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /api/task-graph/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /socket.io/?timestamp=1782175495263&EIO=4&transport=polling&t=x9x0g2qh HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /api/task-graph/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "POST /socket.io/?timestamp=1782175495263&EIO=4&transport=polling&t=x9x0z6ky&sid=_wqJnsI-OAQjAY6_AAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /socket.io/?timestamp=1782175495263&EIO=4&transport=polling&t=x9x10udw&sid=_wqJnsI-OAQjAY6_AAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /api/workspace/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 404 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /socket.io/?timestamp=1782175495263&EIO=4&transport=polling&t=x9x1fm82&sid=_wqJnsI-OAQjAY6_AAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "POST /socket.io/?timestamp=1782175495263&EIO=4&transport=polling&t=x9x1gh7z&sid=_wqJnsI-OAQjAY6_AAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /socket.io/?timestamp=1782175495263&EIO=4&transport=polling&t=x9x2960j&sid=_wqJnsI-OAQjAY6_AAAA HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:44:55] "GET /api/workspace/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 404 -
+127.0.0.1 - - [23/Jun/2026 08:45:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:45:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:46:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:47:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:48:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:49:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:50:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:51:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:52:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:53:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:54:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:55:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:56:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:57:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:58:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 08:59:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:00:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:00:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:00:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:00:16] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:00:21] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:00:26] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:00:31] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:00:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:01:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:02:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:03:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:04:37] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:04:41] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:04:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:04:51] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:04:56] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:16] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:21] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:26] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:31] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:36] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:41] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:46] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:51] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:05:56] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:06:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:06] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:11] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:26] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:31] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:07:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:08:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:20] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:31] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:36] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:41] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:46] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:51] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:09:56] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:10:01] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:10:06] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:10:11] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:10:16] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:10:21] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:10:26] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:10:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:10:59] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:06] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:11] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:16] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:21] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:26] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:31] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:36] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:41] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:46] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:51] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:11:56] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:12:01] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:12:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:13:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:14:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:15:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:16:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:17:22] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:17:25] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:17:30] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:17:35] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:17:40] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:17:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:17:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:17:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:05] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:10] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:15] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:21] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:26] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:31] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:36] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:41] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:46] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:51] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:18:56] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:19:01] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:19:06] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:19:11] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:19:16] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:19:45] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:19:50] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:19:55] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:20:00] "GET /api/status/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:20:04] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:20:04] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:20:04] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:20:04] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:20:04] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:20:04] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:01] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:01] "OPTIONS /api/generate-report HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:01] "POST /api/generate-report HTTP/1.1" 200 -
+Error loading result file for story-9296ed96-f1b5-4508-9185-8f543a7f5bf9: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-cbe20174-ed4d-4de7-a6d4-35ad316b24ed: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-082aef7a-a051-4089-b900-d96ac2df0ed7: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-80e1bb47-370d-44a2-bd2e-e30fee528a61: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-6abef63a-754b-4ba7-ba76-9e0207c66880: Expecting value: line 1 column 1 (char 0)
+Error loading result file for report-4cc26910-cfe5-4dd5-8949-9d88727b9ec9: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-1b159108-25c8-40fb-bde1-2c8078703592: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-c7a7185b-9d8f-41f9-8b48-94bad21a8378: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-f20969cb-8ec7-4f69-bea2-bdd547c39137: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-4ebc0c3a-4e3b-45f2-9286-c66104b8bc52: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-c5563b2b-7b0d-434a-8058-4477e4a3cd06: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-077fd464-da72-47a1-960b-865b0f688363: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-07d98018-e1f5-4c6a-9a37-5c2f55fa3208: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-6c43cb75-5c01-4d7e-aa23-d7702ac829b5: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-0d74fe96-6ce4-49c2-9685-a60ae3eccb06: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-3434df11-9fd8-49ef-80f7-c1e75f5e1379: Expecting value: line 1 column 1 (char 0)
+Error loading result file for story-226f0584-b90b-41a4-afb8-f25ab80ecbf7: Expecting value: line 1 column 1 (char 0)
+Starting task progress monitoring for task: report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea/records
+Sending initial task_update for report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea/records/nodes.json
+Client connected
+Received subscription request: {'taskId': 'report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea'}
+Checking if task report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea exists in storage
+Starting monitoring thread for task report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea
+Starting task progress monitoring for task: report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea/records
+Sending initial task_update for report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea/records/nodes.json
+Sending subscription confirmation for report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea/records/nodes.json
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Starting task progress monitoring for task: report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records
+Sending initial task_update for report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records/nodes.json
+Received subscription request: {'taskId': 'report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592'}
+Checking if task report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 exists in storage
+Starting monitoring thread for task report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+Received subscription request: {'taskId': 'report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592'}
+Checking if task report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 exists in storage
+Starting monitoring thread for task report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+Starting task progress monitoring for task: report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records
+Sending initial task_update for report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records/nodes.json
+Sending subscription confirmation for report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+Starting task progress monitoring for task: report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records127.0.0.1 - - [23/Jun/2026 09:21:02] "GET /api/task-graph/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:02] "GET /api/task-graph/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:02] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:02] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:02] "GET /api/workspace/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 404 -
+127.0.0.1 - - [23/Jun/2026 09:21:02] "GET /api/workspace/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 404 -
+127.0.0.1 - - [23/Jun/2026 09:21:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:21:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:22:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:23:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:23:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:23:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:23:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:23:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:23:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:23:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:23:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:23:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:23:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:24:40] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:24:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:24:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:24:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:24:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:25:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:26:34] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:26:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:26:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:26:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:26:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:26:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:27:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:27:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:27:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:27:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:27:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:27:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:27:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:27:45] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:28:45] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:29:45] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:30:45] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:31:45] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:32:45] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:33:45] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:34:45] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:34:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:34:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:35:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:36:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:37:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:38:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:39:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:40:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:41:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:42:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:43:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:44:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:45:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:46:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:47:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:48:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:27] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:32] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:43] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:49:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:50:37] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:50:42] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:50:47] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:50:52] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:50:57] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:51:02] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:51:07] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:51:12] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:51:17] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:51:22] "POST /api/stop-task/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 09:51:22] "GET /api/status/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:27] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:27] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:27] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:27] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:27] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:27] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:31] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:31] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:31] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:31] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:31] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:03:31] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "OPTIONS /api/generate-report HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "POST /api/generate-report HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "GET /api/task-graph/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "GET /api/task-graph/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "GET /api/workspace/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 404 -
+127.0.0.1 - - [23/Jun/2026 10:04:09] "GET /api/workspace/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 404 -
+127.0.0.1 - - [23/Jun/2026 10:04:14] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:19] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:24] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:29] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:34] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:39] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:44] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:49] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:54] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:04:59] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:04] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:14] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:20] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:25] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:30] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:35] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:39] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:44] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:49] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:05:55] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:00] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:05] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:10] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:15] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:20] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:25] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:30] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:35] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:40] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:45] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:06:50] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:07:45] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:07:55] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:07:59] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:04] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:14] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:19] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:24] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:29] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:34] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:39] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:44] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:49] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:54] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:08:59] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:09:04] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+Sending subscription confirmation for report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+
+Sending initial task_update for report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592/records/nodes.json
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Found Python engine.py process with PID 350128 for task report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592
+Killing process 350128 and its children
+Used kill commands on PID 350128
+Task report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 status changed to stopped
+Reading final state from nodes.json
+Sending final task_update with status stopped
+Task report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 status changed to stopped
+Reading final state from nodes.json
+Sending final task_update with status stopped
+Task report-59ebbd56-2cd0-423e-a7b3-2deadfe5e592 status changed to stopped
+Reading final state from nodes.json
+Sending final task_update with status stopped
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 3 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Starting task progress monitoring for task: report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records
+Sending initial task_update for report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records/nodes.json
+Received subscription request: {'taskId': 'report-0c63c7e5-3be1-47cb-9ced-17addfd7c769'}
+Checking if task report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 exists in storage
+Received subscription request: {'taskId': 'report-0c63c7e5-3be1-47cb-9ced-17addfd7c769'}
+Checking if task report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 exists in storage
+Starting monitoring thread for task report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Starting task progress monitoring for task: report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records
+Sending initial task_update for report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records/nodes.json
+Starting monitoring thread for task report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Sending subscription confirmation for report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records/nodes.json
+Starting task progress monitoring for task: report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records
+Sending initial task_update for report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records/nodes.json
+Sending subscription confirmation for report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769/records/nodes.json
+Detected changes to nodes.json, reading file
+Sending task_update with 0 sub-tasks
+Detected changes to nodes.json, reading file
+Sending task_update with 0 sub-tasks
+Detected changes to nodes.json, reading file
+Sending task_update with 0 sub-tasks
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks127.0.0.1 - - [23/Jun/2026 10:09:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:09:14] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:09:19] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:09:24] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:09:29] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:09:35] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:09:40] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:09:45] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:09:50] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:09:55] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:10:00] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:10:05] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:10:10] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:10:15] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:10:20] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:10:25] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:10:30] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:10:45] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:07] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:14] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:19] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:24] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:29] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:34] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:39] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:44] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:49] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:54] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:11:59] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:05] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:10] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:15] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:20] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:25] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:30] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:35] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:40] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:45] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:50] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:55] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:12:59] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:04] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:14] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:19] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:25] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:30] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:35] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:40] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:45] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:50] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:13:55] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:14:00] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:14:05] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:14:10] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:14:15] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:14:45] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:11] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:14] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:19] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:24] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:29] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:34] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:39] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:44] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:49] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:54] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:15:59] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:04] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:14] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:19] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:24] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:29] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:34] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:39] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:44] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:49] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:54] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:16:59] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:04] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:14] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:19] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:24] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:29] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:34] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:39] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:44] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:49] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:54] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:17:59] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:04] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:09] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:14] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:19] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:24] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:29] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:34] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:39] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:44] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:49] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:54] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:18:59] "GET /api/status/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:03] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:03] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:03] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:03] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:03] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:03] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "OPTIONS /api/generate-report HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "POST /api/generate-report HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "GET /api/task-graph/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "GET /api/task-graph/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "GET /api/workspace/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 404 -
+127.0.0.1 - - [23/Jun/2026 10:19:15] "GET /api/workspace/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 404 -
+127.0.0.1 - - [23/Jun/2026 10:19:20] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:25] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:30] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:35] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:40] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:45] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:50] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:50] "GET /api/result/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:19:50] "GET /api/task-graph/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:20:37] "POST /api/stop-task/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:20:37] "POST /api/stop-task/report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 HTTP/1.1" 200 -
+
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 5 sub-tasks
+Root node has latest action: plan
+First subtask has latest action: plan
+Starting task progress monitoring for task: report-8e520ce8-7452-47ff-8347-4e11a4a28f94
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records
+Sending initial task_update for report-8e520ce8-7452-47ff-8347-4e11a4a28f94
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records/nodes.json
+Received subscription request: {'taskId': 'report-8e520ce8-7452-47ff-8347-4e11a4a28f94'}
+Checking if task report-8e520ce8-7452-47ff-8347-4e11a4a28f94 exists in storage
+Starting monitoring thread for task report-8e520ce8-7452-47ff-8347-4e11a4a28f94
+Starting task progress monitoring for task: report-8e520ce8-7452-47ff-8347-4e11a4a28f94
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records
+Sending initial task_update for report-8e520ce8-7452-47ff-8347-4e11a4a28f94
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records/nodes.json
+Sending subscription confirmation for report-8e520ce8-7452-47ff-8347-4e11a4a28f94
+Received subscription request: {'taskId': 'report-8e520ce8-7452-47ff-8347-4e11a4a28f94'}
+Checking if task report-8e520ce8-7452-47ff-8347-4e11a4a28f94 exists in storage
+Starting monitoring thread for task report-8e520ce8-7452-47ff-8347-4e11a4a28f94
+Starting task progress monitoring for task: report-8e520ce8-7452-47ff-8347-4e11a4a28f94
+Monitoring directory: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records
+Sending initial task_update for report-8e520ce8-7452-47ff-8347-4e11a4a28f94
+Watching for changes to: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records/nodes.json
+Sending subscription confirmation for report-8e520ce8-7452-47ff-8347-4e11a4a28f94
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records/nodes.json
+Waiting for nodes.json file to be created at: /home/0668001635/Desktop/writing_agent/WriteHERE-main/backend/results/report-8e520ce8-7452-47ff-8347-4e11a4a28f94/records/nodes.json
+Detected changes to nodes.json, reading file
+Sending task_update with 0 sub-tasks
+Detected changes to nodes.json, reading file
+Sending task_update with 0 sub-tasks
+Detected changes to nodes.json, reading file
+Sending task_update with 0 sub-tasks
+Detected changes to nodes.json, reading file
+Sending task_update with 1 sub-tasks
+Root node has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 1 sub-tasks
+Root node has latest action: plan
+Detected changes to nodes.json, reading file
+Sending task_update with 1 sub-tasks
+Root node has latest action: plan
+Task report-8e520ce8-7452-47ff-8347-4e11a4a28f94 status changed to completed
+Reading final state from nodes.json
+Sending final task_update with status completed
+Task report-8e520ce8-7452-47ff-8347-4e11a4a28f94 status changed to completed
+Reading final state from nodes.json
+Sending final task_update with status completed
+Task report-8e520ce8-7452-47ff-8347-4e11a4a28f94 status changed to completed
+Reading final state from nodes.json
+Sending final task_update with status completed
+Found Python engine.py process with PID 228863 for task report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea
+Killing process 228863 and its children
+Used kill commands on PID 228863
+Found Python engine.py process with PID 501087 for task report-0c63c7e5-3be1-47cb-9ced-17addfd7c769
+Killing process 501087 and its children
+Used kill commands on PID 501087
+Task report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea status changed to stopped
+Reading final state from nodes.json
+Sending final task_update with status stopped
+Task report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 status changed to stopped
+Reading final state from nodes.json
+Sending final task_update with status stopped
+Task report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 status changed to stopped
+Reading final state from nodes.json
+Task report-0c63c7e5-3be1-47cb-9ced-17addfd7c769 status changed to stopped
+Sending final task_update with status stopped
+Reading final state from nodes.json
+Sending final task_update with status stopped
+Task report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea status changed to stopped127.0.0.1 - - [23/Jun/2026 10:22:23] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:22:23] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:22:23] "GET /api/ping HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:22:23] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:22:23] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 10:22:23] "GET /api/history HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:10] "OPTIONS /api/delete-task/story-6abef63a-754b-4ba7-ba76-9e0207c66880 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:10] "DELETE /api/delete-task/story-6abef63a-754b-4ba7-ba76-9e0207c66880 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:17] "OPTIONS /api/delete-task/report-59e43a9b-b7ac-4030-99de-ad3adb510e7b HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:17] "DELETE /api/delete-task/report-59e43a9b-b7ac-4030-99de-ad3adb510e7b HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:19] "OPTIONS /api/delete-task/story-bf9c0798-0350-43fc-a1d5-744e8054c094 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:19] "DELETE /api/delete-task/story-bf9c0798-0350-43fc-a1d5-744e8054c094 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:21] "OPTIONS /api/delete-task/story-1b159108-25c8-40fb-bde1-2c8078703592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:21] "DELETE /api/delete-task/story-1b159108-25c8-40fb-bde1-2c8078703592 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:23] "OPTIONS /api/delete-task/story-c7a7185b-9d8f-41f9-8b48-94bad21a8378 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:23] "DELETE /api/delete-task/story-c7a7185b-9d8f-41f9-8b48-94bad21a8378 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:25] "OPTIONS /api/delete-task/story-6c43cb75-5c01-4d7e-aa23-d7702ac829b5 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:25] "DELETE /api/delete-task/story-6c43cb75-5c01-4d7e-aa23-d7702ac829b5 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:29] "OPTIONS /api/delete-task/story-80e1bb47-370d-44a2-bd2e-e30fee528a61 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:29] "DELETE /api/delete-task/story-80e1bb47-370d-44a2-bd2e-e30fee528a61 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:32] "OPTIONS /api/delete-task/story-082aef7a-a051-4089-b900-d96ac2df0ed7 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:32] "DELETE /api/delete-task/story-082aef7a-a051-4089-b900-d96ac2df0ed7 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:35] "OPTIONS /api/delete-task/story-0d74fe96-6ce4-49c2-9685-a60ae3eccb06 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:35] "DELETE /api/delete-task/story-0d74fe96-6ce4-49c2-9685-a60ae3eccb06 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:37] "OPTIONS /api/delete-task/story-9296ed96-f1b5-4508-9185-8f543a7f5bf9 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:37] "DELETE /api/delete-task/story-9296ed96-f1b5-4508-9185-8f543a7f5bf9 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:40] "OPTIONS /api/delete-task/story-05e04795-445b-46c2-ab37-d049ce8ac1c8 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:40] "DELETE /api/delete-task/story-05e04795-445b-46c2-ab37-d049ce8ac1c8 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:42] "OPTIONS /api/delete-task/story-cbe20174-ed4d-4de7-a6d4-35ad316b24ed HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:42] "DELETE /api/delete-task/story-cbe20174-ed4d-4de7-a6d4-35ad316b24ed HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:45] "OPTIONS /api/delete-task/story-f7b7fe72-c47f-410a-8f54-69e28d684632 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:45] "DELETE /api/delete-task/story-f7b7fe72-c47f-410a-8f54-69e28d684632 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:47] "OPTIONS /api/delete-task/story-c5563b2b-7b0d-434a-8058-4477e4a3cd06 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:47] "DELETE /api/delete-task/story-c5563b2b-7b0d-434a-8058-4477e4a3cd06 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:51] "OPTIONS /api/delete-task/story-077fd464-da72-47a1-960b-865b0f688363 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:51] "DELETE /api/delete-task/story-077fd464-da72-47a1-960b-865b0f688363 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:54] "OPTIONS /api/delete-task/story-4ebc0c3a-4e3b-45f2-9286-c66104b8bc52 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:54] "DELETE /api/delete-task/story-4ebc0c3a-4e3b-45f2-9286-c66104b8bc52 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:56] "OPTIONS /api/delete-task/story-3434df11-9fd8-49ef-80f7-c1e75f5e1379 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:56] "DELETE /api/delete-task/story-3434df11-9fd8-49ef-80f7-c1e75f5e1379 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:58] "OPTIONS /api/delete-task/story-226f0584-b90b-41a4-afb8-f25ab80ecbf7 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:24:58] "DELETE /api/delete-task/story-226f0584-b90b-41a4-afb8-f25ab80ecbf7 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:00] "OPTIONS /api/delete-task/story-f20969cb-8ec7-4f69-bea2-bdd547c39137 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:00] "DELETE /api/delete-task/story-f20969cb-8ec7-4f69-bea2-bdd547c39137 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:03] "OPTIONS /api/delete-task/story-07d98018-e1f5-4c6a-9a37-5c2f55fa3208 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:03] "DELETE /api/delete-task/story-07d98018-e1f5-4c6a-9a37-5c2f55fa3208 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:10] "OPTIONS /api/delete-task/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:10] "DELETE /api/delete-task/report-82589210-1da7-4a91-ab3d-b0e9a1dc30ea HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:12] "OPTIONS /api/delete-task/report-4cc26910-cfe5-4dd5-8949-9d88727b9ec9 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:12] "DELETE /api/delete-task/report-4cc26910-cfe5-4dd5-8949-9d88727b9ec9 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "GET /api/task-graph/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "GET /api/task-graph/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "POST /api/reload HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "GET /api/result/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "GET /api/status/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "GET /api/result/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "GET /api/task-graph/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:13] "GET /api/task-graph/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:14] "GET /api/workspace/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 14:25:14] "GET /api/workspace/report-8e520ce8-7452-47ff-8347-4e11a4a28f94 HTTP/1.1" 200 -
+127.0.0.1 - - [23/Jun/2026 17:38:31] "GET /socket.io/?timestamp=1782175495263&EIO=4&transport=websocket&sid=_wqJnsI-OAQjAY6_AAAA HTTP/1.1" 200 -
