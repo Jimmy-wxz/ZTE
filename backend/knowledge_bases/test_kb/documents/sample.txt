@@ -1,0 +1,2 @@
+WriteHERE is a recursive writing agent. It uses GraphRunEngine to decompose tasks.
+Chroma is a vector database used for retrieval augmented generation.
