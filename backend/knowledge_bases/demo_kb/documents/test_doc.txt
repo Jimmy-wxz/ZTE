@@ -1,0 +1,1 @@
+WriteHERE 是一个基于递归分解循环（GraphRunEngine）的企业级 AI 写作 Agent。它的核心能力包括：将复杂写作任务递归拆分为检索、推理、写作三类子任务；通过多轮搜索与反思生成结构化长文；支持接入本地知识库（Chroma）实现检索增强生成（RAG）。WriteHERE 的后端使用 Flask + SocketIO，前端使用 React，适合用于技术报告、百科文章等长文本生成场景。
