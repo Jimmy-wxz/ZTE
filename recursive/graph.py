@@ -10,6 +10,7 @@ from overrides import overrides
 import uuid
 from loguru import logger
 import json
+import time
 from copy import deepcopy
 
 task_register = Register('task_register')
@@ -505,15 +506,20 @@ class AbstractNode(ABC):
     
     def do_action(self, action_name, memory, *args, **kwargs):
         agent = self.agent_proxy.proxy(action_name)
+        start_time = time.time()
         result = getattr(self, action_name)(
             agent, memory, *args, **kwargs   
         )
+        duration_seconds = time.time() - start_time
         # Saving information
         self.result[action_name] = {
             "result": result,
             "time": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            "duration_seconds": duration_seconds,
             "agent": self.config["action_mapping"][action_name]
         }
+        logger.info("{} Action {} finished in {:.2f}s".format(
+            self.task_str(), action_name, duration_seconds))
         
         if action_name not in ("update", "prior_reflect", "planning_post_reflect", "execute_post_reflect"):
             if not (action_name in ("execute", "final_aggregate") and self.task_type_tag == "RETRIEVAL"): 
@@ -657,4 +663,3 @@ class RegularDummyNode(AbstractNode):
 
 if __name__ == "__main__":
     pass
-    

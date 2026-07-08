@@ -2,6 +2,7 @@
 from copy import deepcopy
 from collections import defaultdict
 import re
+import threading
 from recursive.cache import Cache
 
 
@@ -23,13 +24,15 @@ class Memory:
         self.article = ""
         self.all_search_results = []
         self.global_start_index = 1
+        self._lock = threading.RLock()
         assert self.format in ("xml", "nl")
         
         
     def add_search_result(self, page):
-        # page["global_index"] = len(self.all_search_results) + 1
-        self.all_search_results.append(page)
-        self.global_start_index += 1
+        with self._lock:
+            page["global_index"] = self.global_start_index
+            self.all_search_results.append(page)
+            self.global_start_index += 1
         return page
   
 
@@ -61,7 +64,11 @@ class Memory:
         pass
 
     def collect_infos(self, node_list):
-        self.init()
+        with self._lock:
+            self.init()
+            return self._collect_infos_unlocked(node_list)
+
+    def _collect_infos_unlocked(self, node_list):
         def inner(node):
             if node.hashkey in self.info_nodes:
                 return self.info_nodes[node.hashkey]

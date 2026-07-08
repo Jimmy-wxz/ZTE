@@ -1,8 +1,0 @@
-{
-  "timestamp": "2026-06-29T16:36:03.501370",
-  "tests": {
-    "chromadb_structure": true,
-    "vector_search": false,
-    "api_endpoint": true
-  }
-}

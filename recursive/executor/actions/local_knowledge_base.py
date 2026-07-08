@@ -1,4 +1,5 @@
 import os
+import threading
 from typing import Any, Dict, List, Optional
 
 from loguru import logger
@@ -7,6 +8,10 @@ from recursive.executor.actions import BaseAction, tool_api
 from recursive.executor.actions.bing_browser import FORMAT_STRING_TEMPLATE
 from recursive.executor.actions.register import tool_register
 from recursive.knowledge_base.service import KnowledgeBaseService
+
+
+_SERVICE_CACHE = {}
+_SERVICE_CACHE_LOCK = threading.Lock()
 
 
 @tool_register.register_module()
@@ -37,7 +42,11 @@ class LocalKnowledgeBase(BaseAction):
     def _get_service(self) -> KnowledgeBaseService:
         if self._service is None:
             base_path = os.environ.get("WRITEHERE_KB_PATH")
-            self._service = KnowledgeBaseService(base_path=base_path)
+            cache_key = os.path.abspath(base_path) if base_path else "__default__"
+            with _SERVICE_CACHE_LOCK:
+                if cache_key not in _SERVICE_CACHE:
+                    _SERVICE_CACHE[cache_key] = KnowledgeBaseService(base_path=base_path)
+                self._service = _SERVICE_CACHE[cache_key]
         return self._service
 
     @tool_api()

@@ -170,8 +170,31 @@ start_frontend() {
   log "Frontend started with PID: $frontend_pid"
 }
 
+cleanup_ports() {
+  for port in "$BACKEND_PORT" "$FRONTEND_PORT"; do
+    if command -v lsof >/dev/null 2>&1; then
+      pids=$(lsof -ti:"$port" 2>/dev/null)
+      if [ -n "$pids" ]; then
+        log "Stopping existing processes on port $port: $pids"
+        kill $pids 2>/dev/null || true
+      fi
+    elif command -v fuser >/dev/null 2>&1; then
+      fuser -k "${port}/tcp" >/dev/null 2>&1 || true
+    fi
+  done
+}
+
+shutdown_servers() {
+  log "Shutting down..."
+  if [ -n "${backend_pid:-}" ] || [ -n "${frontend_pid:-}" ]; then
+    kill ${backend_pid:-} ${frontend_pid:-} 2>/dev/null || true
+  fi
+  log "WriteHERE stopped."
+  exit 0
+}
+
 # Set up cleanup trap for Ctrl+C and other termination
-trap cleanup_before_exit INT TERM
+trap shutdown_servers INT TERM
 
 # Main execution
 log "Starting WriteHERE application..."
@@ -211,9 +234,6 @@ elif command -v start >/dev/null 2>&1; then
   log "Opening browser..."
   start http://localhost:$FRONTEND_PORT
 fi
-
-# Handle graceful shutdown
-trap 'log "Shutting down..."; kill $backend_pid $frontend_pid 2>/dev/null; log "WriteHERE stopped."; exit 0' INT TERM
 
 # Wait for user to stop the servers
 wait

@@ -6,6 +6,8 @@ from pathlib import Path
 
 from collections import defaultdict, deque
 from typing import List, Dict
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
 from recursive.graph import TaskStatus, RegularDummyNode, NodeType
 from recursive.utils.display import display_graph, display_plan
 from recursive.agent.proxy import AgentProxy
@@ -138,6 +140,99 @@ class GraphRunEngine:
         if verbose:
             display_plan(self.root_node.inner_graph)
 
+    def _is_parallel_safe_node(self, node):
+        return (
+            node.status == TaskStatus.READY and
+            node.node_type == NodeType.EXECUTE_NODE and
+            node.task_type_tag in ("RETRIEVAL", "REASONING")
+        )
+
+    def _select_parallel_batch(self, nodes):
+        if not nodes:
+            return []
+        first = nodes[0]
+        if not self._is_parallel_safe_node(first):
+            return []
+        outer = first.node_graph_info.get("outer_node")
+        outer_key = outer.hashkey if outer is not None else None
+        layer = first.node_graph_info.get("layer")
+        return [
+            node for node in nodes
+            if self._is_parallel_safe_node(node) and
+            (node.node_graph_info.get("outer_node").hashkey if node.node_graph_info.get("outer_node") is not None else None) == outer_key and
+            node.node_graph_info.get("layer") == layer
+        ]
+
+    def forward_one_step_parallel(self, full_step=False, log_fn=None,
+                                  nodes_json_file=None, *action_args, **action_kwargs):
+        need_next_step_nodes = self.find_need_next_step_nodes(single=False)
+        if len(need_next_step_nodes) == 0:
+            return self.forward_one_step_not_parallel(
+                full_step=full_step,
+                log_fn=log_fn,
+                nodes_json_file=nodes_json_file,
+                *action_args,
+                **action_kwargs
+            )
+
+        parallel_nodes = self._select_parallel_batch(need_next_step_nodes)
+        if len(parallel_nodes) < 2:
+            return self.forward_one_step_not_parallel(
+                full_step=full_step,
+                log_fn=log_fn,
+                nodes_json_file=nodes_json_file,
+                *action_args,
+                **action_kwargs
+            )
+
+        max_workers = int(self.root_node.config.get("parallel_max_workers", 4))
+        max_workers = max(1, min(max_workers, len(parallel_nodes)))
+        logger.info("Parallel step: executing {} nodes with {} workers".format(
+            len(parallel_nodes), max_workers))
+
+        self.memory.update_infos(parallel_nodes)
+        if nodes_json_file:
+            with open(nodes_json_file, "w") as f:
+                json.dump(self.root_node.to_json(), f, indent=4, ensure_ascii=False)
+
+        def run_node(node):
+            start_time = time.time()
+            if not full_step:
+                action_name, action_result = node.next_action_step(
+                    self.memory, *action_args, **action_kwargs)
+            else:
+                action_name = node.next_full_action_step(self.memory)
+                action_result = None
+            return node, action_name, action_result, time.time() - start_time
+
+        errors = []
+        action_names = []
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            future_to_node = {
+                executor.submit(run_node, node): node for node in parallel_nodes
+            }
+            for future in as_completed(future_to_node):
+                node = future_to_node[future]
+                try:
+                    _, action_name, _, duration = future.result()
+                    action_names.append(action_name)
+                    logger.info("Parallel node finished in {:.2f}s: {}".format(
+                        duration, node.task_str()))
+                except Exception as e:
+                    logger.error("Parallel node failed: {}\n{}".format(
+                        node.task_str(), traceback.format_exc()))
+                    errors.append(e)
+
+        if errors:
+            raise errors[0]
+
+        verbose = any(action_name not in (
+            "update", "prior_reflect", "planning_post_reflect", "execute_post_reflect"
+        ) for action_name in action_names)
+
+        self.forward_exam(self.root_node, verbose)
+        if verbose:
+            display_plan(self.root_node.inner_graph)
 
     def forward_one_step_untill_done(self, full_step=False,
                                            parallel=False,
@@ -146,15 +241,25 @@ class GraphRunEngine:
                                            nodes_json_file=None,
                                            *action_args, **action_kwargs):
         self.root_node.status = TaskStatus.READY
+        use_parallel = parallel or self.root_node.config.get("parallel_execute", False)
         for step in range(10000):
             logger.info("Step {}".format(step))
-            ret = self.forward_one_step_not_parallel(
-                full_step=False,
-                log_fn="logs/temp/{}".format(step),
-                nodes_json_file=nodes_json_file,
-                *action_args,
-                **action_kwargs
-            )
+            if use_parallel:
+                ret = self.forward_one_step_parallel(
+                    full_step=False,
+                    log_fn="logs/temp/{}".format(step),
+                    nodes_json_file=nodes_json_file,
+                    *action_args,
+                    **action_kwargs
+                )
+            else:
+                ret = self.forward_one_step_not_parallel(
+                    full_step=False,
+                    log_fn="logs/temp/{}".format(step),
+                    nodes_json_file=nodes_json_file,
+                    *action_args,
+                    **action_kwargs
+                )
             self.save(save_folder)
             if ret == "done":
                 break
@@ -380,8 +485,15 @@ def report_writing(input_filename,
     # Use current date if not provided
     if today_date is None:
         today_date = datetime.now().strftime("%b %d, %Y")
+    fast_model = os.environ.get("WRITEHERE_FAST_MODEL", global_use_model)
+    writer_model = os.environ.get("WRITEHERE_WRITER_MODEL", global_use_model)
+    reasoner_model = os.environ.get("WRITEHERE_REASONER_MODEL", global_use_model)
+    search_model = os.environ.get("WRITEHERE_SEARCH_MODEL", fast_model)
+    merge_model = os.environ.get("WRITEHERE_MERGE_MODEL", fast_model)
     config = {
         "language": "en",
+        "parallel_execute": True,
+        "parallel_max_workers": int(os.environ.get("WRITEHERE_PARALLEL_MAX_WORKERS", "4")),
         # Agent is Defined in recursive.agent.agents.regular
         # update, prior_reflect, planning_post_reflect and execute_post_reflect is skipped, by using Dummy Agent
         # prompt is Defined in recursive.agent.prompts
@@ -410,7 +522,7 @@ def report_writing(input_filename,
             "execute": {
                 "prompt_version": "ReportWriter",
                 "llm_args": {
-                    "model": global_use_model,
+                    "model": writer_model,
                     "temperature": 0.3
                 },
                 "parse_arg_dict": {
@@ -422,7 +534,7 @@ def report_writing(input_filename,
                 "without_update_prompt_version": "ReportAtom",
                 "with_update_prompt_version": "ReportAtomWithUpdate",
                 "llm_args": {
-                    "model": global_use_model,
+                    "model": fast_model,
                     "temperature": 0.1
                 },
                 "parse_arg_dict": { # parse args from llm output in xml format
@@ -431,18 +543,20 @@ def report_writing(input_filename,
                     "update_result": ["goal_updating"]
                 },
                 "atom_result_flag": "atomic",
+                "atom_retry_limit": 5,
                 "force_atom_layer": 2 # >= 2, force to atom and skip atom judgement (was 3; lowered to save ~2-3 LLM calls per run)
             },
             "planning": {
                 "prompt_version": "ReportPlanning",
                 "llm_args": {
-                    "model": global_use_model,
+                    "model": fast_model,
                     "temperature": 0.1
                 },
                 "parse_arg_dict": {
                     "plan_think": ["think"],
                     "plan_result": ["result"],
                 },
+                "planning_retry_limit": 5,
             },
             "update": {},
             "final_aggregate": {},
@@ -453,7 +567,7 @@ def report_writing(input_filename,
                 "prompt_version": "SearchAgentENPrompt", # see recursive.agent.prompts.search_agent.main
                 "searcher_type": "LocalKnowledgeBase" if str(engine_backend).lower() in ('kb', 'knowledge_base', 'local_kb') else ("SearXNG" if str(engine_backend).lower() == 'searxng' else ("SerpApiSearch" if str(engine_backend).lower() in ('bing', 'duckduckgo', 'google') else "SerpApiSearch")), # see recursive.executor.actions.bing_browser
                 "llm_args": {
-                    "model": global_use_model, # set the llm
+                    "model": search_model, # set the llm
                 },
                 "parse_arg_dict": {
                     "result": ["result"],
@@ -466,16 +580,24 @@ def report_writing(input_filename,
                     "search_querys": ["current_turn_search_querys"],
                 },
                 "temperature": 0.2, # search agent
-                "max_turn": 4, # search agent max turn
-                "llm_merge": True, # use llm to merge search agent result, see recursive.agent.agents.regular.SimpleExcutor.search_merge, the prompt is set in config
+                "max_turn": 1, # single-turn query generation plus one search execution
+                "search_structured_output": True,
+                "llm_merge": "auto", # merge only when the retrieved context is large/complex
                 "only_use_react_summary": False,
+                "kb_web_fallback_coverage_threshold": 0.55,
+                "kb_web_force_supplement": False,
+                "merge_context_char_threshold": 12000,
+                "merge_page_threshold": 8,
+                "execute_retry_limit": 5,
+                "merge_retry_limit": 5,
+                "search_parse_retry_limit": 5,
                 "webpage_helper_max_threads": 10, # use requests to download web page
                 "search_max_thread": 4, # serpapi parallel
                 "backend_engine": engine_backend, # google or bing, defined in serpapi
                 "cc": "US", # search region
                 "topk": 20,
                 "pk_quota": 20, # search agent, pk quota, see __search
-                "select_quota": 12, # search agent select quota
+                "select_quota": 8, # search agent select quota
                 "selector_max_workers": 8, # selector parallel
                 "summarizier_max_workers": 8, # summarizer parallel
                 "selector_model": "gpt-4o-mini",
@@ -486,7 +608,7 @@ def report_writing(input_filename,
             "search_merge": {
                 "prompt_version": "MergeSearchResultVFinal", # search merge prompt
                 "llm_args": {
-                    "model": global_use_model,
+                    "model": merge_model,
                 },
                 "parse_arg_dict": {
                     "result": ["result"],
@@ -495,7 +617,7 @@ def report_writing(input_filename,
             "atom": {
                 "prompt_version": "ReportSearchOnlyUpdate",
                 "llm_args": {
-                    "model": global_use_model,
+                    "model": fast_model,
                 },
                 "parse_arg_dict": {
                     "atom_think": ["think"],
@@ -512,7 +634,7 @@ def report_writing(input_filename,
             "execute": {
                 "prompt_version": "ReportReasoner",
                 "llm_args": {
-                    "model": global_use_model,
+                    "model": reasoner_model,
                     "temperature": 0.3
                 },
                 "parse_arg_dict": {

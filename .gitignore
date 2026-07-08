@@ -2,6 +2,7 @@ project
 run_configs
 logs
 gabbage
+temp/
 *.pyc
 __pycache__
 llm.py.bak
@@ -9,6 +10,24 @@ llm.py.bak
 *.DS_Store
 *.egg-info/
 backend/results/
+*.log
+deepseek_test_results.json
+test_deepseek_*.jsonl
+test_deepseek_done.txt
+testdata_report.json
+web_report_output.jsonl
+web_report_done.txt
+
+# Runtime caches and generated traces
+recursive/cache/
+recursive/records/
+recursive/evaluation/results/
+
+# Local Chroma vector stores restored from external uploads.
+# Keep them on disk for runtime, but avoid pushing large binary DB files.
+backend/knowledge_bases/large_kb/chroma_data/
+testdata/chroma_data/
+testdata/chroma_data_backup/
 
 # Node.js
 node_modules/

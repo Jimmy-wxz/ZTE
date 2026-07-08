@@ -6,6 +6,7 @@ from recursive.utils.file_io import make_mappings
 from pprint import pprint
 import json
 import requests
+import time
 from recursive.executor.actions.register import executor_register
 from recursive.llm.llm import OpenAIApiProxy
 from loguru import logger
@@ -40,12 +41,16 @@ class SearchAgent(BaseAgent):
                  protocol = None,
                  model = "gpt-4o",
                  max_turn: int = 10,
+                 parse_retry_limit: int = 5,
+                 structured_output: bool = False,
                  action_memory = True,
                  remove_history = True,
                  has_search_targets = False,
                  parse_arg_dict = {}) -> None:
         self.message_constructor = prompt_register.module_dict[prompt_version]()
         self.max_turn = max_turn
+        self.parse_retry_limit = parse_retry_limit
+        self.structured_output = structured_output
         self.model = model
         self.force_step = '你需要基于历史消息返回一个最终结果'
         self.action_memory = action_memory
@@ -87,6 +92,12 @@ class SearchAgent(BaseAgent):
                 - action_input (str): contain the required action input
                     for current action.
         """
+        if self.structured_output:
+            try:
+                return self._parse_json_output(message)
+            except Exception as e:
+                logger.warning("Structured search output parse failed, falling back to XML parse: {}".format(e))
+
         output = {key: parse_hierarchy_tags_result(message, tk) for key, tk in self.parse_arg_dict.items()}
         try:
             output["search_querys"] = json.loads(output["search_querys"])
@@ -95,6 +106,39 @@ class SearchAgent(BaseAgent):
             output["search_querys"] = output["search_querys"].replace("'", '"')
             output["search_querys"] = json.loads(output["search_querys"])
         return output
+
+    def _parse_json_output(self, message: str) -> Dict:
+        text = message.strip()
+        if text.startswith("```"):
+            text = text.strip("`").strip()
+            if text.lower().startswith("json"):
+                text = text[4:].strip()
+        if not text.startswith("{"):
+            start = text.find("{")
+            end = text.rfind("}")
+            if start >= 0 and end > start:
+                text = text[start:end + 1]
+        data = json.loads(text)
+
+        search_querys = data.get("current_turn_search_querys", data.get("search_querys", []))
+        if isinstance(search_querys, str):
+            stripped = search_querys.strip()
+            if stripped.startswith("["):
+                search_querys = json.loads(stripped)
+            elif stripped:
+                search_querys = [stripped]
+            else:
+                search_querys = []
+        if not isinstance(search_querys, list):
+            search_querys = []
+
+        return {
+            "observation": str(data.get("observation", "")),
+            "missing_info": str(data.get("missing_info", "")),
+            "think": str(data.get("planning_and_think", data.get("think", ""))),
+            "action_think": str(data.get("current_turn_query_think", data.get("action_think", ""))),
+            "search_querys": [str(q) for q in search_querys if str(q).strip()],
+        }
     
     def format(self,
                chat_history: List[Dict],
@@ -179,6 +223,28 @@ class SearchAgent(BaseAgent):
             to_run_target_write_tasks = to_run_target_write_tasks,
             today_date = today_date
         )
+        if self.max_turn <= 1:
+            final_message += """
+
+# Single-Turn Search Mode
+You have only one LLM turn before tools run. Generate the complete set of search queries now.
+Do not defer important dimensions to a later turn.
+""".rstrip()
+        if self.structured_output:
+            final_message += """
+
+# Structured Output
+Return only a valid JSON object, without Markdown fences or explanatory text.
+The object must use exactly these keys:
+{
+  "observation": "string",
+  "missing_info": "string",
+  "planning_and_think": "string",
+  "current_turn_query_think": "string",
+  "current_turn_search_querys": ["query1", "query2"]
+}
+When no further search is needed, set "current_turn_search_querys" to [].
+""".rstrip()
         formatted.append(dict(role="user", content=final_message))
         
         ret = {
@@ -228,9 +294,17 @@ class SearchAgent(BaseAgent):
             
             cnt = 0
             parsed_resp = None
-            while cnt < 100:
+            response = ""
+            while cnt < self.parse_retry_limit:
+                if self.structured_output and (
+                    "deepseek" in self.model or "gpt" in self.model or "openrouter" in self.model
+                ):
+                    kwargs.setdefault("response_format", {"type": "json_object"})
+                start_time = time.time()
                 response = self._llm.call(messages = prompt["message"],
                                           overwrite_cache = True if cnt > 0 else False, **kwargs)[0]["message"]["content"]
+                logger.info("SearchAgent query LLM call finished in {:.2f}s (turn={}, model={})".format(
+                    time.time() - start_time, turn, self.model))
                 try:
                     parsed_resp = self.parse(response)
                 except Exception as e:
@@ -241,7 +315,8 @@ class SearchAgent(BaseAgent):
                 break
 
             if parsed_resp is None:
-                logger.error("Failed to parse LLM response after 100 retries, using empty search querys to skip")
+                logger.error("Failed to parse LLM response after {} retries, using empty search querys to skip".format(
+                    self.parse_retry_limit))
                 parsed_resp = {
                     "observation": "Failed to parse response",
                     "missing_info": "Unknown",
@@ -289,8 +364,11 @@ class SearchAgent(BaseAgent):
                 logger.info("Do Action {}, param: {}".format(
                     action, action_input
                 ))
+                action_start_time = time.time()
                 action_return: ActionReturn = self._action_executor(
                     action, action_input)
+                logger.info("SearchAgent action {} finished in {:.2f}s".format(
+                    action, time.time() - action_start_time))
                 agent_return.actions.append(action_return)
                 if action_return.result:
                     if "web_pages" in action_return.result:
@@ -320,14 +398,25 @@ class SearchAgent(BaseAgent):
         
         # makeup all results
         results = []
-        for turn_idx, current_turn_info in enumerate(return_info[:-1]):
-            turn_result = current_turn_info["tool_result"]
+        for turn_idx, current_turn_info in enumerate(return_info):
+            turn_result = current_turn_info.get("tool_result")
             if turn_result:
+                if self.max_turn <= 1:
+                    observation = "Single-turn search retrieved {} pages for queries: {}. Use the detailed page contents above as evidence.".format(
+                        len(turn_result.get("web_pages", [])),
+                        current_turn_info.get("search_querys", []))
+                else:
+                    observation = current_turn_info.get("observation", "")
+                if self.max_turn > 1 and turn_idx + 1 < len(return_info):
+                    observation = return_info[turn_idx + 1].get("observation", observation)
+                if not observation:
+                    observation = "Retrieved {} pages in a single search turn.".format(
+                        len(turn_result.get("web_pages", [])))
                 result = {
                     "turn": current_turn_info["turn"],
                     "web_pages": turn_result["web_pages"], # = web_pages (selected)
                     "xml_format_result": turn_result["result"], # = xml concat web pages
-                    "observation": return_info[turn_idx+1]["observation"],
+                    "observation": observation,
                 }
                 results.append(result)
         

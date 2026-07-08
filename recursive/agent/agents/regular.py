@@ -6,6 +6,7 @@ from overrides import overrides
 import os
 import random
 import json
+import time
 from recursive.utils.register import Register
 from recursive.executor.actions.register import executor_register, tool_register
 from recursive.executor.actions import ActionExecutor
@@ -115,6 +116,7 @@ def get_llm_output(node, agent, memory, agent_type, overwrite_cache=False, *args
     }
     
     prompt = prompt_register.module_dict[prompt_version]().construct_prompt(**prompt_args)
+    start_time = time.time()
     llm_result = agent.call_llm(
         system_message = system_message,
         prompt = prompt,
@@ -122,6 +124,12 @@ def get_llm_output(node, agent, memory, agent_type, overwrite_cache=False, *args
         overwrite_cache = overwrite_cache,
         **inner_kwargs.get("llm_args", {})
     ) 
+    logger.info("{} LLM call finished in {:.2f}s (model={}, prompt={}) for {}".format(
+        agent_type,
+        time.time() - start_time,
+        inner_kwargs.get("llm_args", {}).get("model", "unknown"),
+        prompt_version,
+        node.task_str()))
     return llm_result
 
 
@@ -207,7 +215,8 @@ class UpdateAtomPlanningAgent(Agent):
         else:
             succ = False
             retry_cnt = 0
-            while not succ and retry_cnt < 10:
+            atom_retry_limit = int(inner_kwargs.get("atom_retry_limit", 5))
+            while not succ and retry_cnt < atom_retry_limit:
                 atom_llm_result = get_llm_output(
                     node, self, memory, "atom", retry_cnt > 0, *args, **kwargs
                 )
@@ -218,6 +227,9 @@ class UpdateAtomPlanningAgent(Agent):
                                                                                                           atom_llm_result["original"],
                                                                                                           retry_cnt))
                     retry_cnt += 1
+            if not succ:
+                logger.error("ATOM Judgement for {} failed after {} retries; using the last response".format(
+                    node, atom_retry_limit))
 
             atom_llm_result["atom_original"] = atom_llm_result.pop("original")
             return_result.update(atom_llm_result)
@@ -233,7 +245,9 @@ class UpdateAtomPlanningAgent(Agent):
                 succ = False
                 retry_cnt = 0
                 plan_result = []
-                while not succ and retry_cnt < 10:
+                planning_retry_limit = int(
+                    node.config[task_type]["planning"].get("planning_retry_limit", 5))
+                while not succ and retry_cnt < planning_retry_limit:
                     plan_llm_result = get_llm_output(
                         node, self, memory, "planning", retry_cnt > 0, *args, **kwargs
                     )
@@ -380,6 +394,8 @@ class SimpleExcutor(Agent):
                 action_executor=ActionExecutor(actions=actions),
                 model=inner_kwargs["llm_args"]["model"],
                 max_turn=inner_kwargs["max_turn"],
+                parse_retry_limit=inner_kwargs.get("search_parse_retry_limit", 5),
+                structured_output=inner_kwargs.get("search_structured_output", False),
                 action_memory=True,
                 remove_history=True,
                 parse_arg_dict=inner_kwargs["react_parse_arg_dict"]
@@ -399,7 +415,7 @@ class SimpleExcutor(Agent):
                 react_agent_result, memory, inner_kwargs)
 
             # Optional: LLM merge
-            if inner_kwargs.get("llm_merge", False):
+            if self._should_merge_search_results(inner_kwargs, llm_result):
                 execute_result = llm_result.get("result", "")
                 merge_result = self.search_merge(
                     node, memory, execute_result, to_run_outer_write_task)
@@ -414,7 +430,9 @@ class SimpleExcutor(Agent):
         else:
             succ = False 
             retry_cnt = 0
-            while not succ and retry_cnt < 50:
+            retry_limit = int(inner_kwargs.get("execute_retry_limit", 5))
+            llm_result = {"result": ""}
+            while not succ and retry_cnt < retry_limit:
                 llm_result = get_llm_output(
                     node, self, memory, "execute", retry_cnt > 0, *args, **kwargs
                 )
@@ -425,6 +443,9 @@ class SimpleExcutor(Agent):
                                                                                                    llm_result["original"],
                                                                                                    retry_cnt))
                     retry_cnt += 1
+            if not succ:
+                logger.error("Execute for {} failed after {} retries; using the last response".format(
+                    node, retry_limit))
                 
             # for write
             if node.task_type_tag == "COMPOSITION":
@@ -439,6 +460,33 @@ class SimpleExcutor(Agent):
     # -----------------------------------------------------------------
     # Hybrid search helpers (with rerank)
     # -----------------------------------------------------------------
+    def _should_merge_search_results(self, inner_kwargs: dict, llm_result: dict) -> bool:
+        """Decide whether an extra LLM merge pass is worth the latency."""
+        merge_mode = inner_kwargs.get("llm_merge", False)
+        if merge_mode is True:
+            return True
+        if not merge_mode or str(merge_mode).lower() != "auto":
+            return False
+
+        pages = []
+        for item in llm_result.get("ori", []):
+            if not isinstance(item, dict):
+                continue
+            tool_result = item.get("tool_result")
+            if isinstance(tool_result, dict):
+                pages.extend(tool_result.get("web_pages", []) or [])
+
+        result_text = llm_result.get("result", "")
+        page_threshold = int(inner_kwargs.get("merge_page_threshold", 8))
+        char_threshold = int(inner_kwargs.get("merge_context_char_threshold", 12000))
+        should_merge = len(pages) > page_threshold or len(result_text) > char_threshold
+        logger.info(
+            "Search merge policy: mode=auto pages={} chars={} thresholds=({} pages, {} chars) -> {}".format(
+                len(pages), len(result_text), page_threshold, char_threshold, should_merge
+            )
+        )
+        return should_merge
+
     def _is_kb_sufficient(self, kb_result: dict) -> tuple:
         """Evaluate KB quality using rerank scores AND Chroma distance scores.
 
@@ -707,6 +755,11 @@ class SimpleExcutor(Agent):
         # Step 2: Quality check with rerank scores
         has_kb = len(kb_result.get("web_pages", [])) > 0
         _, coverage = self._is_kb_sufficient(kb_result)
+        coverage_threshold = float(
+            inner_kwargs.get("kb_web_fallback_coverage_threshold", 0.55))
+        force_supplement = str(
+            inner_kwargs.get("kb_web_force_supplement", False)
+        ).lower() in ("1", "true", "yes", "on")
         logger.info("KB-First: Step 2 – coverage={:.2f}, has_kb={}".format(
             coverage, has_kb))
 
@@ -727,10 +780,17 @@ class SimpleExcutor(Agent):
                     return self._format_search_agent_result(web_result, memory, inner_kwargs)
             return self._format_kb_result(kb_result)
 
-        # Always supplement with web search when SerpAPI is available
+        if coverage >= coverage_threshold and not force_supplement:
+            logger.info(
+                "KB-First: coverage={:.2f} >= threshold={:.2f}; skip web fallback".format(
+                    coverage, coverage_threshold))
+            return self._format_kb_result(kb_result)
+
+        # Supplement with web search only when KB coverage is insufficient or forced.
         if has_serpapi:
             logger.info(
-                "KB-First: Step 3 – KB coverage={:.2f}, supplementing with SerpAPI web search".format(coverage))
+                "KB-First: Step 3 - KB coverage={:.2f}, threshold={:.2f}, supplementing with SerpAPI web search".format(
+                    coverage, coverage_threshold))
             web_result = self._do_web_search_fallback(
                 node, memory, inner_kwargs,
                 to_run_target_write_tasks, to_run_root_question,
@@ -995,7 +1055,10 @@ class SimpleExcutor(Agent):
         for turn_idx, turn_result in enumerate(merged_turns):
             source_type = "Local KB" if turn_idx == 0 else "Web Search"
             for page in turn_result["web_pages"]:
-                memory.add_search_result(page)
+                # KB pages were already registered by _do_kb_search; web pages
+                # are registered here so their citation indices follow KB.
+                if turn_idx != 0:
+                    memory.add_search_result(page)
                 if not inner_kwargs.get("only_use_react_summary", False):
                     execute_result.append(FORMAT_STRING_TEMPLATE.format(
                         index=page["global_index"],
@@ -1055,7 +1118,9 @@ class SimpleExcutor(Agent):
         
         succ = False 
         retry_cnt = 0
-        while not succ and retry_cnt < 50:
+        retry_limit = int(node.config["RETRIEVAL"]["execute"].get("merge_retry_limit", 5))
+        while not succ and retry_cnt < retry_limit:
+            start_time = time.time()
             llm_result = self.call_llm(
                 system_message = system_message,
                 prompt = prompt,
@@ -1063,6 +1128,8 @@ class SimpleExcutor(Agent):
                 overwrite_cache = True if retry_cnt > 0 else False,
                 **inner_kwargs.get("llm_args", {})
             )
+            logger.info("Search merge LLM call finished in {:.2f}s for {}".format(
+                time.time() - start_time, node.task_str()))
             # 判定是否失败，如果result不为空则为成功
             succ = (llm_result["result"].strip() != "")
             if not succ:
@@ -1071,7 +1138,8 @@ class SimpleExcutor(Agent):
                                                                                                     retry_cnt))
                 retry_cnt += 1
         if not succ:
-            logger.error("Search Merge for {} after retry fail, return the original as result".format(node))
+            logger.error("Search Merge for {} failed after {} retries, return the original as result".format(
+                node, retry_limit))
             llm_result = {"result": search_results}
             
         return llm_result

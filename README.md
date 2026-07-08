@@ -179,7 +179,7 @@ PORT=8000 npm start
 
 ### Troubleshooting
 
-If you encounter any issues, please check the [Troubleshooting Guide](TROUBLESHOOTING.md) for common problems and solutions.
+If you encounter any issues, please check the [Troubleshooting Guide](docs/TROUBLESHOOTING.md) for common problems and solutions.
 
 ## ✨ Features
 
@@ -196,22 +196,20 @@ If you encounter any issues, please check the [Troubleshooting Guide](TROUBLESHO
 
 ```
 .
-├── backend/               # Backend Flask server
-├── frontend/              # React frontend
-├── recursive/             # Core engine implementation
-│   ├── agent/             # Agent implementation and prompts
-│   ├── executor/          # Task execution modules
-│   ├── llm/               # Language model integrations
-│   ├── utils/             # Utility functions and helpers
-│   ├── cache.py           # Caching for improved efficiency
-│   ├── engine.py          # Core planning and execution engine
-│   ├── graph.py           # Task graph representation
-│   ├── memory.py          # Memory management
-│   ├── test_run_report.sh # Script for generating reports
-│   └── test_run_story.sh  # Script for generating stories
-├── test_data/             # Example data for testing
-└── start.sh               # All-in-one startup script
+├── backend/               # Flask API and local knowledge-base storage
+├── frontend/              # React visualization interface
+├── recursive/             # Core recursive RAG writing engine
+├── docs/                  # Setup, troubleshooting, test-data, and optimization notes
+├── scripts/               # Auxiliary scripts and web-page extraction helpers
+├── tests/                 # Local smoke/integration scripts
+├── test_data/             # Small sample inputs, prompts, and example outputs
+├── testdata/              # Test Chroma vector database
+├── start.sh               # Main one-step application launcher
+├── setup_env.sh           # Environment bootstrap script
+└── run_with_anaconda.sh   # Conda launcher
 ```
+
+See [Project Structure](docs/PROJECT_STRUCTURE.md) for a fuller directory map.
 
 ## 📊 Real-time Task Visualization
 
