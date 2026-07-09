@@ -45,6 +45,31 @@ task_storage = {}
 RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results')
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
+def _load_result_or_error(output_file, stderr_text=""):
+    """Load a one-line JSONL task result and preserve useful engine errors."""
+    if not os.path.exists(output_file):
+        return None, "Output file not generated"
+
+    with open(output_file, 'r', encoding='utf-8') as f:
+        content = f.read().strip()
+
+    if not content:
+        tail = stderr_text.strip()[-4000:]
+        detail = "Output file generated but empty"
+        if tail:
+            detail += "\n\nEngine stderr tail:\n" + tail
+        return None, detail
+
+    try:
+        result_data = json.loads(content.splitlines()[0])
+        return result_data.get("result", "No result available"), None
+    except Exception as exc:
+        tail = stderr_text.strip()[-4000:]
+        detail = f"Failed to parse output file: {exc}"
+        if tail:
+            detail += "\n\nEngine stderr tail:\n" + tail
+        return None, detail
+
 def reload_task_storage():
     """Reload task storage from the file system"""
     global task_storage
@@ -144,6 +169,7 @@ def run_story_generation(task_id, prompt, model, api_keys):
     # Create a script to run the engine with the appropriate environment
     script_path = os.path.join(task_dir, 'run.sh')
     recursive_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../recursive'))
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     with open(script_path, 'w') as f:
         f.write(f"""#!/bin/bash
 cd "{recursive_dir}"
@@ -154,6 +180,7 @@ source "{env_file}"
 set +a
 
 export TASK_ENV_FILE="{env_file}"
+export PYTHONPATH="{project_root}:$PYTHONPATH"
 
 {sys.executable} engine.py --filename "{input_file}" --output-filename "{output_file}" --done-flag-file "{done_file}" --model {model} --mode story --nodes-json-file "{nodes_file}"
 """)
@@ -186,18 +213,17 @@ export TASK_ENV_FILE="{env_file}"
         
         # Check if the process completed successfully
         if process.returncode == 0:
-            task_storage[task_id]["status"] = "completed"
-            # Store the result if available
-            if os.path.exists(output_file):
-                with open(output_file, 'r') as f:
-                    result_data = json.load(f)
-                    task_storage[task_id]["result"] = result_data.get("result", "No result available")
-            else:
+            result, error = _load_result_or_error(
+                output_file, stderr.decode('utf-8', errors='replace'))
+            if error:
                 task_storage[task_id]["status"] = "error"
-                task_storage[task_id]["error"] = "Output file not generated"
+                task_storage[task_id]["error"] = error
+            else:
+                task_storage[task_id]["status"] = "completed"
+                task_storage[task_id]["result"] = result
         else:
             task_storage[task_id]["status"] = "error"
-            task_storage[task_id]["error"] = stderr.decode('utf-8')
+            task_storage[task_id]["error"] = stderr.decode('utf-8', errors='replace')
     except Exception as e:
         task_storage[task_id]["status"] = "error"
         task_storage[task_id]["error"] = str(e)
@@ -258,6 +284,7 @@ def run_report_generation(task_id, prompt, model, enable_search, search_engine, 
     else:
         engine_backend = search_engine if enable_search else "none"
     recursive_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../recursive'))
+    project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
     # Optional shim to ensure engine subprocess can use pysqlite3 for Chroma
     kb_exports = ""
@@ -314,6 +341,7 @@ source "{env_file}"
 set +a
 
 export TASK_ENV_FILE="{env_file}"{kb_exports}
+export PYTHONPATH="{project_root}:$PYTHONPATH"
 
 {sys.executable} engine.py --filename "{input_file}" --output-filename "{output_file}" --done-flag-file "{done_file}" --model {model} --engine-backend {engine_backend} --mode report --nodes-json-file "{nodes_file}"
 """)
@@ -347,18 +375,17 @@ export TASK_ENV_FILE="{env_file}"{kb_exports}
         
         # Check if the process completed successfully
         if process.returncode == 0:
-            task_storage[task_id]["status"] = "completed"
-            # Store the result if available
-            if os.path.exists(output_file):
-                with open(output_file, 'r') as f:
-                    result_data = json.load(f)
-                    task_storage[task_id]["result"] = result_data.get("result", "No result available")
-            else:
+            result, error = _load_result_or_error(
+                output_file, stderr.decode('utf-8', errors='replace'))
+            if error:
                 task_storage[task_id]["status"] = "error"
-                task_storage[task_id]["error"] = "Output file not generated"
+                task_storage[task_id]["error"] = error
+            else:
+                task_storage[task_id]["status"] = "completed"
+                task_storage[task_id]["result"] = result
         else:
             task_storage[task_id]["status"] = "error"
-            task_storage[task_id]["error"] = stderr.decode('utf-8')
+            task_storage[task_id]["error"] = stderr.decode('utf-8', errors='replace')
     except Exception as e:
         task_storage[task_id]["status"] = "error"
         task_storage[task_id]["error"] = str(e)
@@ -1702,4 +1729,3 @@ def compare_evaluations():
     comparison['success'] = True
 
     return jsonify(comparison)
-

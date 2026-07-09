@@ -64,6 +64,7 @@ const ReportGenerationPage = () => {
     openai: localStorage.getItem('openai_api_key') || '',
     claude: localStorage.getItem('claude_api_key') || '',
     gemini: localStorage.getItem('gemini_api_key') || '',
+    deepseek: localStorage.getItem('deepseek_api_key') || '',
     serpapi: localStorage.getItem('serpapi_api_key') || '',
     nebulacoder: localStorage.getItem('nebulacoder_api_key') || '',
   });
@@ -71,6 +72,7 @@ const ReportGenerationPage = () => {
   const [showOpenAIKey, setShowOpenAIKey] = useState(false);
   const [showClaudeKey, setShowClaudeKey] = useState(false);
   const [showGeminiKey, setShowGeminiKey] = useState(false);
+  const [showDeepSeekKey, setShowDeepSeekKey] = useState(false);
   const [showSerpApiKey, setShowSerpApiKey] = useState(false);
   const [showNebulacoderKey, setShowNebulacoderKey] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -87,6 +89,7 @@ const ReportGenerationPage = () => {
     if (apiKeys.openai) localStorage.setItem('openai_api_key', apiKeys.openai);
     if (apiKeys.claude) localStorage.setItem('claude_api_key', apiKeys.claude);
     if (apiKeys.gemini) localStorage.setItem('gemini_api_key', apiKeys.gemini);
+    if (apiKeys.deepseek) localStorage.setItem('deepseek_api_key', apiKeys.deepseek);
     if (apiKeys.serpapi) localStorage.setItem('serpapi_api_key', apiKeys.serpapi);
     if (apiKeys.nebulacoder) localStorage.setItem('nebulacoder_api_key', apiKeys.nebulacoder);
   }, [apiKeys]);
@@ -133,6 +136,7 @@ const ReportGenerationPage = () => {
     const isOpenAIModel = model.toLowerCase().includes('gpt');
     const isClaudeModel = model.toLowerCase().includes('claude');
     const isGeminiModel = model.toLowerCase().includes('gemini');
+    const isDeepSeekModel = model.toLowerCase().includes('deepseek');
     const isNebulacoderModel = model.toLowerCase().includes('nebulacoder');
     
     if (isOpenAIModel && !apiKeys.openai) {
@@ -149,6 +153,12 @@ const ReportGenerationPage = () => {
     
     if (isGeminiModel && !apiKeys.gemini) {
       setError('Please provide your Google Gemini API key in the settings section.');
+      setShowApiSection(true);
+      return;
+    }
+
+    if (isDeepSeekModel && !apiKeys.deepseek) {
+      setError('Please provide your DeepSeek API key in the settings section.');
       setShowApiSection(true);
       return;
     }
@@ -198,6 +208,7 @@ const ReportGenerationPage = () => {
           openai: apiKeys.openai,
           claude: apiKeys.claude,
           gemini: apiKeys.gemini,
+          deepseek: apiKeys.deepseek,
           serpapi: apiKeys.serpapi,
           nebulacoder: apiKeys.nebulacoder
         }
@@ -544,6 +555,31 @@ const ReportGenerationPage = () => {
                                     edge="end"
                                   >
                                     {showSerpApiKey ? <VisibilityOff /> : <Visibility />}
+                                  </IconButton>
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            label="DeepSeek API Key"
+                            fullWidth
+                            variant="outlined"
+                            value={apiKeys.deepseek}
+                            onChange={(e) => handleApiKeyChange('deepseek', e.target.value)}
+                            type={showDeepSeekKey ? 'text' : 'password'}
+                            placeholder="sk-..."
+                            helperText="Required for DeepSeek models"
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    aria-label="toggle password visibility"
+                                    onClick={() => setShowDeepSeekKey(!showDeepSeekKey)}
+                                    edge="end"
+                                  >
+                                    {showDeepSeekKey ? <VisibilityOff /> : <Visibility />}
                                   </IconButton>
                                 </InputAdornment>
                               ),

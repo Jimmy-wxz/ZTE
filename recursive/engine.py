@@ -681,7 +681,6 @@ def report_writing(input_filename,
     caches["search"] = Cache("{}/../cache/{}-{}-search".format(root_folder, start, end)) # cache search and llm result
     caches["llm"] = Cache("{}/../cache/{}-{}-llm".format(root_folder, start, end))
 
-    import os
     if os.path.exists(output_filename):
         done_ques = [item["prompt"]  for item in read_jsonl(output_filename)]
         filtered_items = [item for item in items if item["prompt"] not in done_ques]
@@ -710,7 +709,6 @@ def report_writing(input_filename,
         )
         root_node.node_graph_info["root_node"] = root_node
         engine = GraphRunEngine(root_node, "xml", config)
-        import os
         qstr = item["id"]
         folder = "{}/{}".format(root_folder, qstr)
         os.makedirs(folder, exist_ok=True)
