@@ -653,7 +653,7 @@ class BingBrowser(BaseAction):
 
  
     @tool_api()
-    def direct_url_fetch(self, url_list, user_question):
+    def direct_url_fetch(self, url_list: List[str], user_question: str):
         """Direct URL Fetch API - Fetches content directly from specified URLs without search.
 
         ### Specific Functions

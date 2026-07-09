@@ -95,9 +95,18 @@ def tool_api(func: Optional[Callable] = None,
         when ``explode_return`` or ``returns_named_value`` is enabled.
     """
 
-    def _detect_type(string):        
+    def _annotation_to_string(annotation):
+        if annotation is inspect.Signature.empty or annotation is None:
+            return ''
+        origin = get_origin(annotation)
+        if origin is not None:
+            return getattr(origin, '__name__', str(origin))
+        return getattr(annotation, '__name__', str(annotation))
+
+    def _detect_type(annotation):
+        string = _annotation_to_string(annotation).lower()
         field_type = 'STRING'
-        if 'list' in string:
+        if 'list' in string or 'array' in string:
             field_type = 'array'
         elif 'str' not in string:
             if 'float' in string:
@@ -145,7 +154,11 @@ def tool_api(func: Optional[Callable] = None,
             if doc.kind is DocstringSectionKind.parameters:
                 for d in doc.value:
                     d = d.as_dict()
-                    d['type'] = _detect_type(d["annotation"].lower())
+                    annotation = d.get("annotation")
+                    if annotation:
+                        d['type'] = _detect_type(annotation)
+                    else:
+                        d.pop("annotation", None)
                     args_doc[d['name']] = d
             if doc.kind is DocstringSectionKind.returns:
                 for d in doc.value:
@@ -163,11 +176,14 @@ def tool_api(func: Optional[Callable] = None,
         for name, param in sig.parameters.items():
             if name == 'self':
                 continue
+            arg_doc = args_doc.get(param.name, {})
+            annotation = arg_doc.get("annotation") or _annotation_to_string(
+                param.annotation)
             parameter = dict(
                 name=param.name,
-                type=args_doc[param.name]["type"],
-                annotation=args_doc[param.name].get("annotation", ""),
-                description=args_doc[param.name]["description"])
+                type=arg_doc.get("type") or _detect_type(annotation),
+                annotation=annotation,
+                description=arg_doc.get("description", ""))
             desc['parameters'].append(parameter)
             if param.default is inspect.Signature.empty:
                 parameter["required"] = True
