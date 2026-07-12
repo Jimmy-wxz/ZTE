@@ -101,6 +101,22 @@ def extract_and_renumber_citations(text: str, citation_urls):
 
     return updated_text, new_citation_urls
 
+def _source_key(page):
+    """Return the deduplication key used for a cited source."""
+    url = page.get("url", "")
+    if is_local_kb_url(url):
+        return url.replace("local-kb://", "").replace("kb://", "")
+    return url
+
+
+def _remove_duplicate_labels(text):
+    """Collapse accidental repeated adjacent citation labels."""
+    pattern = r'(\[(?:WEB|KB):\d+\])(\1)+'
+    while re.search(pattern, text):
+        text = re.sub(pattern, r'\1', text)
+    return text
+
+
 def process_citations(text, citation_to_url):
     """Process citations in text and build URL reference mapping.
 
@@ -108,89 +124,115 @@ def process_citations(text, citation_to_url):
       - [reference:1] — canonical format from writer LLM
       - [ref:1]       — shorthand variant
       - [1]           — plain numeric (treated as reference)
+      - [WEB:1]/[KB:1] — explicit namespace variant, where 1 is the
+        original search result index
+      - [Local KB: 1]/[Web Search: 1] — labels sometimes emitted by the LLM
 
-    Returns (updated_text, web_refs_dict, kb_refs_dict).
+    Returns (updated_text, web_refs_dict, kb_refs_dict). The returned text uses
+    unambiguous source namespaces:
+      - [WEB:N] for public web search sources
+      - [KB:N] for local knowledge-base sources
     """
-    # Step 1: find ALL citation patterns in the article text
-    # Match [reference:N], [ref:N], and bare [N] (single or multi-digit)
+    # Step 1: find all citation patterns in the article text.
     citation_pattern = r'\[(?:reference|ref):(\d+)\]'
     bare_pattern = r'(?<!\[reference)(?<!\[ref)\[(\d+)\](?!\()'  # [N] not followed by (
+    namespaced_pattern = r'\[(Local\s+KB|Web\s+Search|WEB|KB|Web):\s*(\d+)\]'
 
-    # Collect all used IDs from [reference:N] format
-    ref_ids = [int(m) for m in re.findall(citation_pattern, text)]
-    bare_ids = [int(m) for m in re.findall(bare_pattern, text)]
-    all_used_ids = set(ref_ids + bare_ids)
-
-    # Find first position of each citation ID for ordering
-    old2id_2_pos = {}
-    for idx in all_used_ids:
-        # Try [reference:N] first
-        matches = list(re.finditer(r'\[(?:reference|ref):{}]'.format(idx), text))
-        if matches:
-            old2id_2_pos[idx] = matches[0].start()
-        else:
-            # Try bare [N]
-            bare_matches = list(re.finditer(r'(?<!\[reference)(?<!\[ref)\[{}](?!\()'.format(idx), text))
-            if bare_matches:
-                old2id_2_pos[idx] = bare_matches[0].start()
+    matches = []
+    for m in re.finditer(citation_pattern, text):
+        matches.append((m.start(), int(m.group(1))))
+    for m in re.finditer(bare_pattern, text):
+        matches.append((m.start(), int(m.group(1))))
+    for m in re.finditer(namespaced_pattern, text, flags=re.IGNORECASE):
+        matches.append((m.start(), int(m.group(2))))
 
     # Separate web URLs and KB URLs
     web_citation_to_url = {}
     kb_citation_to_url = {}
-    url2page = {}
-
     for cid, page in citation_to_url.items():
         url = page.get("url", "")
-        url2page[url] = page
         if is_local_kb_url(url):
             kb_citation_to_url[cid] = page
         else:
             web_citation_to_url[cid] = page
 
-    # Build URL → old IDs mapping (only for actually cited IDs)
-    url_to_old_ids = {}
-    for cid in sorted(all_used_ids):
-        if cid in web_citation_to_url:
-            url = web_citation_to_url[cid]["url"]
-            if url not in url_to_old_ids:
-                url_to_old_ids[url] = []
-            url_to_old_ids[url].append((cid, old2id_2_pos.get(cid, 0)))
+    # Step 2: assign stable source labels by first citation appearance.
+    source_positions = {}
+    source_pages = {}
+    old_to_label = {}
 
-    # Step 3: renumber unique web URLs as sequential [1], [2], ...
-    old_to_new_id = {}
-    new_web_citation_to_url = {}
-    new_id = 1
+    for pos, old_id in sorted(matches, key=lambda x: x[0]):
+        page = citation_to_url.get(old_id)
+        if not page:
+            continue
+        namespace = "KB" if is_local_kb_url(page.get("url", "")) else "WEB"
+        key = (namespace, _source_key(page))
+        if key not in source_positions:
+            source_positions[key] = pos
+            source_pages[key] = page
 
-    for url, old_id_and_pos in sorted(url_to_old_ids.items(), key=lambda x: x[1][0][1]):
-        for old_id, pos in old_id_and_pos:
-            old_to_new_id[old_id] = new_id
-        new_web_citation_to_url[new_id] = url2page[url]
-        new_id += 1
+    web_keys = [
+        key for key, _ in sorted(source_positions.items(), key=lambda x: x[1])
+        if key[0] == "WEB"
+    ]
+    kb_keys = [
+        key for key, _ in sorted(source_positions.items(), key=lambda x: x[1])
+        if key[0] == "KB"
+    ]
 
-    # Step 4: replace all [reference:N] with renumbered IDs
+    web_key_to_new_id = {key: idx for idx, key in enumerate(web_keys, start=1)}
+    kb_key_to_new_id = {key: idx for idx, key in enumerate(kb_keys, start=1)}
+
+    new_web_citation_to_url = {
+        new_id: source_pages[key] for key, new_id in web_key_to_new_id.items()
+    }
+    new_kb_citation_to_url = {
+        new_id: source_pages[key] for key, new_id in kb_key_to_new_id.items()
+    }
+
+    for old_id, page in citation_to_url.items():
+        namespace = "KB" if is_local_kb_url(page.get("url", "")) else "WEB"
+        key = (namespace, _source_key(page))
+        if namespace == "WEB" and key in web_key_to_new_id:
+            old_to_label[old_id] = "WEB:{}".format(web_key_to_new_id[key])
+        elif namespace == "KB" and key in kb_key_to_new_id:
+            old_to_label[old_id] = "KB:{}".format(kb_key_to_new_id[key])
+
+    def _label_for_old_id(old_id, original=None):
+        if old_id in old_to_label:
+            return "[{}]".format(old_to_label[old_id])
+        return original or "[{}]".format(old_id)
+
+    # Step 3: replace all citation styles with explicit source namespaces.
     def replace_ref_citation(match):
         old_id = int(match.group(1))
-        if old_id in old_to_new_id:
-            return '[{}]'.format(old_to_new_id[old_id])
-        return '[{}]'.format(old_id)
+        return _label_for_old_id(old_id, match.group(0))
 
-    updated_text = re.sub(citation_pattern, replace_ref_citation, text)
+    def replace_namespaced_citation(match):
+        explicit_label = match.group(1).strip().lower().replace(" ", "")
+        explicit_namespace = "KB" if explicit_label == "localkb" else "WEB"
+        old_id = int(match.group(2))
+        page = citation_to_url.get(old_id)
+        if page:
+            actual_namespace = "KB" if is_local_kb_url(page.get("url", "")) else "WEB"
+            if actual_namespace != explicit_namespace:
+                return match.group(0)
+        return _label_for_old_id(old_id, match.group(0))
 
-    # Step 5: replace bare [N] citations with renumbered IDs too
+    updated_text = re.sub(
+        namespaced_pattern, replace_namespaced_citation, text,
+        flags=re.IGNORECASE
+    )
+    updated_text = re.sub(citation_pattern, replace_ref_citation, updated_text)
+
     def replace_bare_citation(match):
         old_id = int(match.group(1))
-        if old_id in old_to_new_id:
-            return '[{}]'.format(old_to_new_id[old_id])
-        return '[{}]'.format(old_id)
+        return _label_for_old_id(old_id, match.group(0))
 
     updated_text = re.sub(bare_pattern, replace_bare_citation, updated_text)
+    updated_text = _remove_duplicate_labels(updated_text)
 
-    # Step 6: remove consecutive duplicate citations
-    pattern_consecutive = r'(\[\d+\])(\1)+'
-    while re.search(pattern_consecutive, updated_text):
-        updated_text = re.sub(pattern_consecutive, r'\1', updated_text)
-
-    return updated_text, new_web_citation_to_url, kb_citation_to_url
+    return updated_text, new_web_citation_to_url, new_kb_citation_to_url
 
 
 def get_report_with_ref(data, article):
@@ -213,20 +255,19 @@ def get_report_with_ref(data, article):
             url = page.get("url", "")
             if len(title) > 100:
                 title = title[:97] + "..."
-            lines.append("- **[{}]** [{}]({})".format(index, title, url))
+            lines.append("- **[WEB:{}]** [{}]({})".format(index, title, url))
 
     # Knowledge base references
     if kb_pages:
         lines.append("\n### 知识库来源")
-        seen_sources = {}
-        for cid, page in kb_pages.items():
+        for index, page in sorted(kb_pages.items()):
             url = page.get("url", "")
             if url.startswith("local-kb://"):
                 source = url.replace("local-kb://", "")
                 title = page.get("title", "本地知识库: {}".format(source))
-                if source not in seen_sources:
-                    seen_sources[source] = (len(seen_sources) + 1, title)
-                    lines.append("- **{}** - `{}`".format(title, source))
+                if len(title) > 100:
+                    title = title[:97] + "..."
+                lines.append("- **[KB:{}]** {} - `{}`".format(index, title, source))
 
     article += "\n".join(lines) + "\n"
     return article
@@ -250,19 +291,19 @@ if __name__ == "__main__":
     if web_pages:
         refs.append("## 网页来源")
         for index, page in sorted(web_pages.items()):
-            refs.append("- [{}]({}). {} ".format(index, page["url"], page["title"]))
+            refs.append("- [WEB:{}]({}). {} ".format(index, page["url"], page["title"]))
 
     # KB 引用
     if kb_pages:
         if refs:
             refs.append("")
         refs.append("## 知识库来源")
-        for cid, page in kb_pages.items():
+        for cid, page in sorted(kb_pages.items()):
             url = page.get("url", "")
             if url.startswith("local-kb://"):
                 source = url.replace("local-kb://", "")
                 title = page.get("title", f"本地知识库: {source}")
-                refs.append("- {} (来源: {})".format(title, source))
+                refs.append("- [KB:{}] {} (来源: {})".format(cid, title, source))
 
     article += "\n\n# References\n{}".format("\n\n".join(refs))
     open("{}/report_with_ref.md".format(folder), "w").write(article.strip())

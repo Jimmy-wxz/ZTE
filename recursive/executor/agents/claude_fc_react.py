@@ -42,6 +42,7 @@ class SearchAgent(BaseAgent):
                  model = "gpt-4o",
                  max_turn: int = 10,
                  parse_retry_limit: int = 5,
+                 max_search_queries: int = 6,
                  structured_output: bool = False,
                  action_memory = True,
                  remove_history = True,
@@ -50,6 +51,7 @@ class SearchAgent(BaseAgent):
         self.message_constructor = prompt_register.module_dict[prompt_version]()
         self.max_turn = max_turn
         self.parse_retry_limit = parse_retry_limit
+        self.max_search_queries = max(1, int(max_search_queries or 6))
         self.structured_output = structured_output
         self.model = model
         self.force_step = '你需要基于历史消息返回一个最终结果'
@@ -139,6 +141,25 @@ class SearchAgent(BaseAgent):
             "action_think": str(data.get("current_turn_query_think", data.get("action_think", ""))),
             "search_querys": [str(q) for q in search_querys if str(q).strip()],
         }
+
+    def _limit_search_querys(self, search_querys):
+        limited = []
+        seen = set()
+        for query in search_querys or []:
+            query = str(query).strip()
+            if not query:
+                continue
+            key = query.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            limited.append(query)
+            if len(limited) >= self.max_search_queries:
+                break
+        if search_querys and len(limited) < len(search_querys):
+            logger.info("SearchAgent limited queries from {} to {}".format(
+                len(search_querys), len(limited)))
+        return limited
     
     def format(self,
                chat_history: List[Dict],
@@ -229,7 +250,9 @@ class SearchAgent(BaseAgent):
 # Single-Turn Search Mode
 You have only one LLM turn before tools run. Generate the complete set of search queries now.
 Do not defer important dimensions to a later turn.
+Generate at most {max_search_queries} high-value search queries.
 """.rstrip()
+            final_message = final_message.replace("{max_search_queries}", str(self.max_search_queries))
         if self.structured_output:
             final_message += """
 
@@ -244,7 +267,9 @@ The object must use exactly these keys:
   "current_turn_search_querys": ["query1", "query2"]
 }
 When no further search is needed, set "current_turn_search_querys" to [].
+The "current_turn_search_querys" array must contain at most {max_search_queries} items.
 """.rstrip()
+            final_message = final_message.replace("{max_search_queries}", str(self.max_search_queries))
         formatted.append(dict(role="user", content=final_message))
         
         ret = {
@@ -327,6 +352,8 @@ When no further search is needed, set "current_turn_search_querys" to [].
                     
             current_turn_info = {"turn": turn}
             current_turn_info.update(parsed_resp)
+            current_turn_info["search_querys"] = self._limit_search_querys(
+                current_turn_info.get("search_querys", []))
             current_turn_info["response"] = response
             return_info.append(current_turn_info)
             context_historys.append(current_turn_info)

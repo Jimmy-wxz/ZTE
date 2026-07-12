@@ -7,6 +7,7 @@ import os
 import random
 import json
 import time
+from urllib.parse import urlparse
 from recursive.utils.register import Register
 from recursive.executor.actions.register import executor_register, tool_register
 from recursive.executor.actions import ActionExecutor
@@ -141,6 +142,118 @@ def extract_json_content(text):
     return None
 
 
+_FAST_FALSE_VALUES = {"0", "false", "no", "off", "disable", "disabled"}
+
+
+def _as_bool(value, default=False):
+    if value is None:
+        return default
+    if isinstance(value, bool):
+        return value
+    return str(value).strip().lower() not in _FAST_FALSE_VALUES
+
+
+def _safe_int(value, default):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _fast_report_planning_config(node, task_type):
+    if task_type != "COMPOSITION":
+        return {}
+    planning_config = node.config.get(task_type, {}).get("planning", {})
+    if not _as_bool(planning_config.get("fast_mode"), False):
+        return {}
+    return planning_config
+
+
+def _node_layer(node):
+    return _safe_int(node.node_graph_info.get("layer", 0), 0)
+
+
+def _fast_report_write_should_be_atomic(node, task_type, planning_config):
+    if not planning_config:
+        return False
+    if node.task_info.get("task_type") != "write":
+        return False
+    force_layer = _safe_int(planning_config.get("fast_force_write_atom_layer"), 1)
+    return _node_layer(node) >= force_layer
+
+
+def _length_number(length_value):
+    if length_value is None:
+        return None
+    match = re.search(r"(\d+(?:\.\d+)?)\s*(万|千|k|K)?", str(length_value))
+    if not match:
+        return None
+    number = float(match.group(1))
+    unit = match.group(2)
+    if unit == "万":
+        number *= 10000
+    elif unit in ("千", "k", "K"):
+        number *= 1000
+    return int(number)
+
+
+def _length_unit(length_value):
+    text = str(length_value or "").lower()
+    if "word" in text:
+        return " words"
+    return "字"
+
+
+def _count_nested_tasks(tasks):
+    if not isinstance(tasks, list):
+        return 0
+    total = len(tasks)
+    for task in tasks:
+        if isinstance(task, dict):
+            total += _count_nested_tasks(task.get("sub_tasks"))
+    return total
+
+
+def _sanitize_fast_report_plan(node, task_type, plan_result):
+    planning_config = _fast_report_planning_config(node, task_type)
+    if not planning_config or not isinstance(plan_result, list):
+        return plan_result
+
+    max_write_length = _safe_int(planning_config.get("fast_max_write_length"), 1200)
+    strip_nested_subtasks = _as_bool(planning_config.get("fast_strip_nested_subtasks"), True)
+    changed_lengths = 0
+    stripped_subtasks = 0
+
+    def sanitize_task(task):
+        nonlocal changed_lengths, stripped_subtasks
+        if not isinstance(task, dict):
+            return task
+
+        if task.get("task_type") == "write" and max_write_length > 0:
+            current_length = _length_number(task.get("length"))
+            if current_length and current_length > max_write_length:
+                task["length"] = "{}{}".format(max_write_length, _length_unit(task.get("length")))
+                changed_lengths += 1
+
+        sub_tasks = task.get("sub_tasks")
+        if isinstance(sub_tasks, list) and sub_tasks:
+            if strip_nested_subtasks:
+                stripped_subtasks += _count_nested_tasks(sub_tasks)
+                task["sub_tasks"] = []
+            else:
+                task["sub_tasks"] = [sanitize_task(sub_task) for sub_task in sub_tasks]
+        return task
+
+    sanitized = [sanitize_task(task) for task in plan_result]
+    if changed_lengths or stripped_subtasks:
+        logger.info(
+            "Fast report planning sanitized {}: capped {} write lengths, stripped {} nested subtasks".format(
+                node.task_str(), changed_lengths, stripped_subtasks
+            )
+        )
+    return sanitized
+
+
 
 @agent_register.register_module()
 class UpdateAtomPlanningAgent(Agent):
@@ -169,6 +282,17 @@ class UpdateAtomPlanningAgent(Agent):
         else:
             task_type = node.task_type_tag
             inner_kwargs = node.config[task_type]["atom"]
+
+        fast_planning_config = _fast_report_planning_config(node, task_type)
+        if _fast_report_write_should_be_atomic(node, task_type, fast_planning_config):
+            plan_result = []
+            return_result["result"] = plan_result
+            logger.info(
+                "Fast report mode forces write node to atom: {}, layer={}".format(
+                    node.task_str(), _node_layer(node)
+                )
+            )
+            return return_result
             
         if inner_kwargs.get("all_atom", False):
             if not "prompt_version" in inner_kwargs:
@@ -201,6 +325,7 @@ class UpdateAtomPlanningAgent(Agent):
                 logger.info("Candidate Plan Missing: {}".format(candidate_plan))                
             else:
                 plan_result = candidate_plan
+                plan_result = _sanitize_fast_report_plan(node, task_type, plan_result)
             return_result["result"] = plan_result
             logger.info("Use Candidate Plan for: {}, the candidate plan is \n{}".format(
                 node.task_info["goal"],
@@ -266,6 +391,7 @@ class UpdateAtomPlanningAgent(Agent):
                             retry_cnt += 1
                             continue 
                     succ = True
+                plan_result = _sanitize_fast_report_plan(node, task_type, plan_result)
                         
                 plan_llm_result["result"] = plan_result
                 return_result.update(plan_llm_result)
@@ -279,6 +405,7 @@ class UpdateAtomPlanningAgent(Agent):
 
 FORMAT_STRING_TEMPLATE = """
 <web_page index={index}>
+<source_type>{source_type}</source_type>
 <title>
 {title}
 </title>
@@ -395,6 +522,7 @@ class SimpleExcutor(Agent):
                 model=inner_kwargs["llm_args"]["model"],
                 max_turn=inner_kwargs["max_turn"],
                 parse_retry_limit=inner_kwargs.get("search_parse_retry_limit", 5),
+                max_search_queries=inner_kwargs.get("max_search_queries", 6),
                 structured_output=inner_kwargs.get("search_structured_output", False),
                 action_memory=True,
                 remove_history=True,
@@ -509,14 +637,11 @@ class SimpleExcutor(Agent):
         # Stage 1: Check Chroma distance scores
         # Chroma uses cosine distance by default (range [0, 2], lower = more similar)
         distance_ok_count = 0
-        distance_penalty = 0.0
         for p in pages:
             dist = p.get("distance", None)
             if dist is not None:
-                if dist <= 0.5:
+                if dist <= 0.8:
                     distance_ok_count += 1
-                elif dist > 0.8:
-                    distance_penalty += 0.1  # penalize poor matches
 
         # Stage 2: Reranker scores
         scores = [p.get("rerank_score", 0.0) for p in pages]
@@ -539,11 +664,12 @@ class SimpleExcutor(Agent):
         # Weighted coverage score
         coverage = norm_max * 0.5 + norm_count * 0.3 + norm_avg * 0.2
 
-        # Apply distance-based penalty
+        # Apply only a mild distance-based penalty. Different Chroma/embedding
+        # setups can report distances on different scales; reranker scores are
+        # the stronger relevance signal here.
         distance_ratio = distance_ok_count / max(len(pages), 1)
         if distance_ratio < 0.5:
-            coverage *= 0.7  # most chunks have poor vector similarity
-        coverage -= distance_penalty
+            coverage *= 0.85
         coverage = max(0.0, min(1.0, coverage))
 
         logger.info(
@@ -552,6 +678,84 @@ class SimpleExcutor(Agent):
                     distance_ok_count, len(pages), coverage)
         )
         return coverage >= 0.30, coverage
+
+    def _fast_kb_candidate_score(self, goal: str, page: dict) -> float:
+        """Cheap pre-rank score before expensive cross-encoder rerank."""
+        text = "{}\n{}\n{}\n{}".format(
+            page.get("title", ""),
+            page.get("source", ""),
+            page.get("search_query", ""),
+            page.get("summary", ""),
+        )
+        upper_goal = goal.upper()
+        upper_text = text.upper()
+        score = 0.0
+
+        for term in ("IAST", "SAST", "DAST", "SCA", "RASP", "DEVSECOPS"):
+            if term in upper_goal and term in upper_text:
+                score += 2.5
+
+        for term in (
+            "交互式应用安全测试",
+            "应用安全测试",
+            "安全测试",
+            "漏洞扫描",
+            "应用安全培训",
+            "产品安全",
+            "软件供应链安全",
+            "渗透测试",
+            "BSIMM",
+            "APPSecScan",
+            "eBPF",
+        ):
+            if term in goal and term in text:
+                score += 2.0
+
+        query = page.get("search_query", "") or ""
+        if query and len(query) <= 24 and query in text:
+            score += 1.5
+
+        dist = page.get("distance")
+        if isinstance(dist, (int, float)):
+            score += max(0.0, 2.0 - float(dist)) * 0.5
+
+        try:
+            score += 1.0 / (float(page.get("pk_index", 99)) + 1.0)
+        except Exception:
+            pass
+
+        return score
+
+    def _select_diverse_kb_pages(self, pages, limit):
+        """Keep high-scoring pages while avoiding one source dominating."""
+        if limit <= 0:
+            return []
+        ranked = sorted(
+            pages,
+            key=lambda p: (
+                -p.get("fast_kb_score", 0.0),
+                p.get("distance", 999.0) if p.get("distance") is not None else 999.0,
+            ),
+        )
+
+        selected = []
+        seen_sources = set()
+        for page in ranked:
+            source = page.get("source") or page.get("title") or page.get("url")
+            if source in seen_sources:
+                continue
+            selected.append(page)
+            seen_sources.add(source)
+            if len(selected) >= limit:
+                return selected
+
+        for page in ranked:
+            if page in selected:
+                continue
+            selected.append(page)
+            if len(selected) >= limit:
+                break
+        return selected
 
     def _do_kb_search(self, node, memory, kb_name, inner_kwargs):
         """Execute KB retrieval with multi-query variants + rerank.
@@ -575,9 +779,17 @@ class SimpleExcutor(Agent):
             len(query_variants), goal[:60]))
 
         # Step 1: coarse retrieval with each variant, merge & deduplicate
+        kb_variant_topk = int(inner_kwargs.get("kb_variant_topk", 4))
+        kb_rerank_candidate_limit = int(
+            inner_kwargs.get("kb_rerank_candidate_limit", 24))
+        kb_rerank_cpu_candidates = int(
+            inner_kwargs.get("kb_rerank_cpu_candidates", 8))
+        kb_final_topk = int(inner_kwargs.get("kb_final_topk", 5))
+        kb_rerank_mode = str(
+            inner_kwargs.get("kb_rerank_mode", "auto")).lower()
         kb_action = LocalKnowledgeBase(
             knowledge_base_name=kb_name,
-            topk=8,  # per-variant candidates
+            topk=kb_variant_topk,
         )
         all_pages = []  # list of (page dict, chunk_id)
         seen_chunks = set()
@@ -607,26 +819,66 @@ class SimpleExcutor(Agent):
         logger.info("KB search: {} unique chunks from {} queries".format(
             len(all_pages), len(query_variants)))
 
+        for page in all_pages:
+            page["fast_kb_score"] = self._fast_kb_candidate_score(goal, page)
+
+        candidate_limit = kb_rerank_candidate_limit
+        if (
+            kb_rerank_mode == "auto"
+            and os.environ.get("WRITEHERE_LOCAL_MODEL_DEVICE", "cpu").lower() == "cpu"
+        ):
+            candidate_limit = min(candidate_limit, kb_rerank_cpu_candidates)
+        candidate_limit = max(kb_final_topk, candidate_limit)
+        ranked_pages = self._select_diverse_kb_pages(all_pages, candidate_limit)
+
+        if kb_rerank_mode in ("0", "false", "off", "none", "fast"):
+            for page in ranked_pages:
+                page["rerank_score"] = min(
+                    0.95, 0.35 + page.get("fast_kb_score", 0.0) / 10.0)
+            top_pages = self._select_diverse_kb_pages(ranked_pages, kb_final_topk)
+            logger.info(
+                "KB Rerank: mode={} skipped cross-encoder; {} chunks -> top-{} (scores: {})".format(
+                    kb_rerank_mode,
+                    len(all_pages),
+                    kb_final_topk,
+                    ", ".join("{:.2f}".format(p.get("rerank_score", 0.0)) for p in top_pages),
+                )
+            )
+            for idx, page in enumerate(top_pages, start=memory.global_start_index):
+                page["global_index"] = idx
+            kb_result = {
+                "web_pages": top_pages,
+                "result": "",
+            }
+            for page in top_pages:
+                memory.add_search_result(page)
+            return kb_result
+
         # Step 2: rerank merged set with cross-encoder
         try:
             reranker = get_reranker()
-            texts = [p.get("summary", "") for p in all_pages]
+            rerank_pages = ranked_pages
+            texts = [p.get("summary", "") for p in rerank_pages]
             scores = reranker.rerank(goal, texts)
-            for p, s in zip(all_pages, scores):
+            for p, s in zip(rerank_pages, scores):
                 p["rerank_score"] = s
             # Sort by rerank score descending
-            all_pages.sort(key=lambda x: x.get("rerank_score", 0), reverse=True)
-            # Keep top-5
-            top_pages = all_pages[:5]
+            rerank_pages.sort(key=lambda x: x.get("rerank_score", 0), reverse=True)
+            top_pages = rerank_pages[:kb_final_topk]
             logger.info(
                 "KB Rerank: {} chunks → top-5 (scores: {})".format(
-                    len(all_pages),
+                    len(rerank_pages),
                     ", ".join("{:.2f}".format(p.get("rerank_score", 0)) for p in top_pages)
                 )
             )
+            logger.info(
+                "KB Rerank detail: total_candidates={}, reranked={}, mode={}, final_topk={}".format(
+                    len(all_pages), len(rerank_pages), kb_rerank_mode, kb_final_topk)
+            )
         except Exception as e:
-            logger.warning("Rerank failed ({}), falling back to raw top-5".format(e))
-            top_pages = all_pages[:5]
+            logger.warning("Rerank failed ({}), falling back to raw top-{}".format(
+                e, kb_final_topk))
+            top_pages = self._select_diverse_kb_pages(ranked_pages, kb_final_topk)
 
         # Re-number global_index sequentially
         for idx, page in enumerate(top_pages, start=memory.global_start_index):
@@ -651,6 +903,27 @@ class SimpleExcutor(Agent):
         """
         import re
         variants = [goal]  # always include the full goal
+
+        # Add compact keyword queries for acronym-heavy security topics. Long
+        # report/search goals can dilute short terms such as "IAST" in the
+        # bi-encoder query embedding, while the KB often stores those terms in
+        # concise titles or table cells.
+        upper_goal = goal.upper()
+        for term in ("IAST", "SAST", "DAST", "SCA", "RASP", "DEVSECOPS"):
+            if term in upper_goal:
+                variants.append(term)
+
+        for term in (
+            "交互式应用安全测试",
+            "应用安全测试",
+            "安全测试",
+            "漏洞扫描",
+            "应用安全培训",
+            "产品安全",
+            "软件供应链安全",
+        ):
+            if term in goal:
+                variants.append(term)
 
         # Variant 1: strip verbose instruction prefixes
         cleaned = goal
@@ -813,6 +1086,56 @@ class SimpleExcutor(Agent):
             len(kb_result.get("web_pages", [])), coverage))
         return self._format_kb_result(kb_result)
 
+    def _web_source_quality_score(self, page):
+        """Score public web pages with a small authority bias.
+
+        The score is intentionally simple and deterministic: it avoids another
+        LLM call while nudging SerpAPI fallback toward official reports,
+        standards bodies, vulnerability databases, and vendor/security advisories.
+        """
+        url = page.get("url", "") or ""
+        title = (page.get("title", "") or "").lower()
+        snippet = (page.get("snippet", "") or "").lower()
+        domain = urlparse(url).netloc.lower()
+        if domain.startswith("www."):
+            domain = domain[4:]
+
+        score = 0.0
+        position = page.get("position", 100)
+        try:
+            score -= float(position) * 0.02
+        except Exception:
+            pass
+
+        official_domains = (
+            ".gov", ".edu", "nist.gov", "cve.org", "mitre.org", "owasp.org",
+            "cnnvd.org.cn", "cnvd.org.cn", "weforum.org", "fortinet.com",
+            "microsoft.com", "google.com", "cloudflare.com", "spring.io",
+            "github.com",
+        )
+        if any(domain.endswith(d) or domain == d for d in official_domains):
+            score += 3.0
+
+        security_domains = (
+            "secrss.com", "freebuf.com", "anquanke.com", "qianxin.com",
+            "rapid7.com", "snyk.io", "wiz.io", "cisa.gov",
+        )
+        if any(domain.endswith(d) or domain == d for d in security_domains):
+            score += 1.2
+
+        authority_terms = (
+            "report", "advisory", "漏洞通报", "安全公告", "白皮书",
+            "threat landscape", "global cybersecurity outlook", "cve", "cnnvd",
+        )
+        if any(term in title or term in snippet for term in authority_terms):
+            score += 0.8
+
+        low_signal_terms = ("培训机构", "课程购买", "优惠", "招商", "广告")
+        if any(term in title or term in snippet for term in low_signal_terms):
+            score -= 1.0
+
+        return score
+
     def _do_web_search_fallback(
         self, node, memory, inner_kwargs,
         to_run_target_write_tasks, to_run_root_question, to_run_outer_write_task
@@ -889,7 +1212,8 @@ class SimpleExcutor(Agent):
             # Step 2: Fetch web page content (deduplicated, sorted by position)
             pk_quota = inner_kwargs.get("pk_quota", 20)
             pages_to_fetch = sorted(
-                all_results.values(), key=lambda x: x.get("position", 100)
+                all_results.values(),
+                key=lambda x: (-self._web_source_quality_score(x), x.get("position", 100))
             )[:pk_quota]
 
             fetched_pages = searcher.fetch_content(pages_to_fetch)
@@ -902,6 +1226,10 @@ class SimpleExcutor(Agent):
 
             # Step 3: Format results with explicit URL references
             # Each page already has: url, title, content, snippet, publish_time, position
+            fetched_pages = sorted(
+                fetched_pages,
+                key=lambda x: (-self._web_source_quality_score(x), x.get("position", 100))
+            )
             global_start = memory.global_start_index
             web_pages = []
             formatted_parts = []
@@ -924,6 +1252,7 @@ class SimpleExcutor(Agent):
                     "publish_time": page.get("publish_time", "Not Provided"),
                     "summary": combined_summary,
                     "search_query": page.get("search_query", ""),
+                    "source_quality_score": round(self._web_source_quality_score(page), 3),
                     "pk_index": idx - global_start + 1,
                 }
                 web_pages.append(page_entry)

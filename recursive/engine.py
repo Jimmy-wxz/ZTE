@@ -543,7 +543,7 @@ def report_writing(input_filename,
                     "update_result": ["goal_updating"]
                 },
                 "atom_result_flag": "atomic",
-                "atom_retry_limit": 5,
+                "atom_retry_limit": int(os.environ.get("WRITEHERE_RETRY_LIMIT", "2")),
                 "force_atom_layer": 2 # >= 2, force to atom and skip atom judgement (was 3; lowered to save ~2-3 LLM calls per run)
             },
             "planning": {
@@ -556,7 +556,13 @@ def report_writing(input_filename,
                     "plan_think": ["think"],
                     "plan_result": ["result"],
                 },
-                "planning_retry_limit": 5,
+                "planning_retry_limit": int(os.environ.get("WRITEHERE_RETRY_LIMIT", "2")),
+                # Fast report mode keeps the root plan shallow and prevents write nodes
+                # from recursively expanding into many more LLM calls.
+                "fast_mode": os.environ.get("WRITEHERE_FAST_REPORT", "1").lower() not in ("0", "false", "no", "off"),
+                "fast_max_write_length": int(os.environ.get("WRITEHERE_FAST_MAX_WRITE_LENGTH", "1200")),
+                "fast_force_write_atom_layer": int(os.environ.get("WRITEHERE_FAST_FORCE_WRITE_ATOM_LAYER", "1")),
+                "fast_strip_nested_subtasks": os.environ.get("WRITEHERE_FAST_STRIP_NESTED_SUBTASKS", "1").lower() not in ("0", "false", "no", "off"),
             },
             "update": {},
             "final_aggregate": {},
@@ -588,9 +594,15 @@ def report_writing(input_filename,
                 "kb_web_force_supplement": False,
                 "merge_context_char_threshold": 12000,
                 "merge_page_threshold": 8,
-                "execute_retry_limit": 5,
-                "merge_retry_limit": 5,
-                "search_parse_retry_limit": 5,
+                "execute_retry_limit": int(os.environ.get("WRITEHERE_RETRY_LIMIT", "2")),
+                "merge_retry_limit": int(os.environ.get("WRITEHERE_RETRY_LIMIT", "2")),
+                "search_parse_retry_limit": int(os.environ.get("WRITEHERE_RETRY_LIMIT", "2")),
+                "max_search_queries": int(os.environ.get("WRITEHERE_MAX_SEARCH_QUERIES", "6")),
+                "kb_variant_topk": int(os.environ.get("WRITEHERE_KB_VARIANT_TOPK", "4")),
+                "kb_rerank_candidate_limit": int(os.environ.get("WRITEHERE_KB_RERANK_CANDIDATES", "24")),
+                "kb_rerank_cpu_candidates": int(os.environ.get("WRITEHERE_KB_RERANK_CPU_CANDIDATES", "8")),
+                "kb_rerank_mode": os.environ.get("WRITEHERE_KB_RERANK_MODE", "auto"),
+                "kb_final_topk": int(os.environ.get("WRITEHERE_KB_FINAL_TOPK", "5")),
                 "webpage_helper_max_threads": 10, # use requests to download web page
                 "search_max_thread": 4, # serpapi parallel
                 "backend_engine": engine_backend, # google or bing, defined in serpapi

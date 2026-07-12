@@ -40,6 +40,10 @@ class ReportReasoner(PromptTemplate):
    * 使用 [reference:X] 格式在适当句子的末尾引用来源
    * 如果信息来自多个来源，列出所有相关引用，例如 [reference:3][reference:5]
    * 引用应出现在正文中，而不是集中在末尾
+   * 搜索结果中的 <source_type>Local KB</source_type> 表示本地知识库，属于内部权威材料；<source_type>Web Search</source_type> 或 <source_type>Web Search (SerpAPI)</source_type> 表示公开网络资料
+   * 内部项目、岗位、课程、历史培训、流程实践等事实应优先依据 Local KB；公开网络资料只用于补充外部趋势、公开案例、行业报告和横向对比
+   * 不要自行重排或改写引用编号；系统会在最终报告中自动把本地知识库引用转换为 [KB:N]，把网络引用转换为 [WEB:N]
+   * 如果来源之间存在冲突或可信度不足，应明确说明“内部资料显示”“公开资料显示”或“不足以确认”，不要写成绝对结论
 
 # 输出格式
 1. 首先，在 <thinking> 中进行思考

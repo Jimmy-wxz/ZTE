@@ -304,9 +304,16 @@ def run_report_generation(task_id, prompt, model, enable_search, search_engine, 
         project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
         external_path = os.environ.get(external_path_env) or os.path.join(project_root, 'testdata', 'chroma_data')
         external_embedding = os.environ.get(external_embedding_env, "")
+        allow_hf_network = os.environ.get("WRITEHERE_ALLOW_HF_NETWORK", "").strip().lower() in ("1", "true", "yes", "on")
+        hf_offline_exports = "" if allow_hf_network else """
+export HF_HUB_OFFLINE="1"
+export TRANSFORMERS_OFFLINE="1"
+export HF_DATASETS_OFFLINE="1"
+export HF_HUB_DISABLE_TELEMETRY="1"
+"""
 
         if knowledge_base_name.lower() == "testdata" and os.path.isdir(external_path):
-            kb_exports = f"""
+            kb_exports = f"""{hf_offline_exports}
 export WRITEHERE_USE_KB="true"
 export WRITEHERE_KB_NAME="{knowledge_base_name}"
 export WRITEHERE_KB_PATH="{kb_base_path}"
@@ -316,7 +323,7 @@ export PYTHONPATH="{shim_dir}:$PYTHONPATH"
 """
         elif knowledge_base_name.lower() == "large_kb":
             large_kb_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'knowledge_bases', 'large_kb', 'chroma_data')
-            kb_exports = f"""
+            kb_exports = f"""{hf_offline_exports}
 export WRITEHERE_USE_KB="true"
 export WRITEHERE_KB_NAME="{knowledge_base_name}"
 export WRITEHERE_KB_PATH="{kb_base_path}"
@@ -325,7 +332,7 @@ export {external_embedding_env}="{external_embedding or LARGE_KB_EMBEDDING_MODEL
 export PYTHONPATH="{shim_dir}:$PYTHONPATH"
 """
         else:
-            kb_exports = f"""
+            kb_exports = f"""{hf_offline_exports}
 export WRITEHERE_USE_KB="true"
 export WRITEHERE_KB_NAME="{knowledge_base_name}"
 export WRITEHERE_KB_PATH="{kb_base_path}"

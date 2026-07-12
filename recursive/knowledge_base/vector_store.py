@@ -7,6 +7,12 @@ from .constants import DEFAULT_CHROMA_PERSIST_DIR, DEFAULT_EMBEDDING_MODEL
 from .embedding import get_embedding_provider, LocalEmbedding, OpenAIEmbedding
 
 
+EXTERNAL_KB_DEFAULT_EMBEDDINGS = {
+    "large_kb": "BAAI/bge-large-zh-v1.5",
+    "testdata": "BAAI/bge-large-zh-v1.5",
+}
+
+
 def _sanitize_collection_name(name: str) -> str:
     """Chroma collection names must be 3-63 chars and match [a-zA-Z0-9_-]."""
     safe = "".join(c if c.isalnum() or c in "_-" else "_" for c in name)
@@ -81,9 +87,10 @@ class ChromaVectorStore:
             # Cache both client and embedding provider to avoid reloading
             # the local embedding model on every search call
             if normalized not in self._external_clients:
-                external_embedding = os.environ.get(
-                    "WRITEHERE_KB_{}_EMBEDDING".format(normalized.upper()),
-                    self.embedding_model_name,
+                external_embedding = (
+                    os.environ.get("WRITEHERE_KB_{}_EMBEDDING".format(normalized.upper()))
+                    or EXTERNAL_KB_DEFAULT_EMBEDDINGS.get(normalized.lower())
+                    or self.embedding_model_name
                 )
                 self._external_clients[normalized] = (
                     chromadb.PersistentClient(path=external_path),
