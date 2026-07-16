@@ -22,6 +22,8 @@ from recursive.agent.prompts.base import prompt_register
 from recursive.executor.agents.claude_fc_react import SearchAgent
 from recursive.executor.actions.bing_browser import BingBrowser, SerpApiSearch, FORMAT_STRING_TEMPLATE
 from recursive.executor.actions.local_knowledge_base import LocalKnowledgeBase
+from recursive.evidence import annotate_page_evidence, evaluate_rubric_gap
+from recursive.search.mode import apply_search_mode_overrides, classify_search_mode
 from recursive.knowledge_base.embedding import get_reranker
 import re
     
@@ -425,6 +427,125 @@ FORMAT_STRING_TEMPLATE = """
 
 @agent_register.register_module()
 class SimpleExcutor(Agent):
+    def _evidence_enabled(self, inner_kwargs):
+        value = inner_kwargs.get(
+            "evidence_ledger",
+            os.environ.get("WRITEHERE_EVIDENCE_LEDGER", "1"))
+        return str(value).lower() not in ("0", "false", "no", "off")
+
+    def _evidence_verify_mode(self, inner_kwargs):
+        return str(inner_kwargs.get(
+            "evidence_verify_mode",
+            os.environ.get("WRITEHERE_EVIDENCE_VERIFY_MODE", "heuristic"))).lower()
+
+    def _rubric_gap_enabled(self, inner_kwargs):
+        value = inner_kwargs.get(
+            "rubric_gap_check",
+            os.environ.get("WRITEHERE_RUBRIC_GAP_CHECK", "1"))
+        return str(value).lower() not in ("0", "false", "no", "off")
+
+    def _node_evidence_id(self, node):
+        nid = getattr(node, "nid", "")
+        return str(nid or getattr(node, "hashkey", "") or "unknown")
+
+    def _annotate_evidence_pages(
+        self, pages, node, source_type, inner_kwargs, sub_question=None
+    ):
+        if not pages or node is None or not self._evidence_enabled(inner_kwargs):
+            return pages
+        node_goal = node.task_info.get("goal", "")
+        node_id = self._node_evidence_id(node)
+        verify_mode = self._evidence_verify_mode(inner_kwargs)
+        for page in pages:
+            if page.get("evidence"):
+                continue
+            annotate_page_evidence(
+                page=page,
+                node_id=node_id,
+                node_goal=node_goal,
+                sub_question=sub_question or node_goal,
+                source_type=source_type,
+                verify_mode=verify_mode,
+            )
+        return pages
+
+    def _evaluate_rubric_gap(self, node, pages, inner_kwargs):
+        if not self._rubric_gap_enabled(inner_kwargs):
+            return {
+                "enabled": False,
+                "should_supplement_web": False,
+                "required_coverage": 1.0,
+                "missing_required": [],
+                "preferred_web_missing": [],
+                "dimensions": [],
+            }
+        min_dimension_score = float(inner_kwargs.get(
+            "rubric_min_dimension_score",
+            os.environ.get("WRITEHERE_RUBRIC_MIN_DIMENSION_SCORE", "0.42")))
+        min_supported_pages = int(inner_kwargs.get(
+            "rubric_min_supported_pages",
+            os.environ.get("WRITEHERE_RUBRIC_MIN_SUPPORTED_PAGES", "2")))
+        result = evaluate_rubric_gap(
+            goal=node.task_info.get("goal", ""),
+            pages=pages,
+            min_dimension_score=min_dimension_score,
+            min_supported_pages=min_supported_pages,
+        )
+        result["enabled"] = True
+        logger.info(
+            "Rubric Gap Check: required_coverage={:.2f}, supported_pages={}, missing={}, web_missing={}, supplement={}".format(
+                result.get("required_coverage", 0.0),
+                result.get("supported_pages", 0),
+                result.get("missing_required", []),
+                result.get("preferred_web_missing", []),
+                result.get("should_supplement_web", False),
+            )
+        )
+        return result
+
+    def _search_mode_dispatch_enabled(self, inner_kwargs):
+        value = inner_kwargs.get(
+            "search_mode_dispatch",
+            os.environ.get("WRITEHERE_SEARCH_MODE_DISPATCH", "1"))
+        return str(value).lower() not in ("0", "false", "no", "off")
+
+    def _dispatch_search_mode(self, node, memory, inner_kwargs):
+        if not self._search_mode_dispatch_enabled(inner_kwargs):
+            disabled = dict(inner_kwargs)
+            disabled["search_mode"] = "default"
+            disabled["search_mode_profile"] = {
+                "mode": "default",
+                "reason": "disabled",
+                "settings": {},
+                "scores": {},
+                "forced": False,
+            }
+            disabled["search_mode_overrides"] = {}
+            return disabled
+
+        forced_mode = inner_kwargs.get(
+            "search_mode",
+            os.environ.get("WRITEHERE_SEARCH_MODE", "auto"))
+        root_question = ""
+        if memory is not None and getattr(memory, "root_node", None) is not None:
+            root_question = memory.root_node.task_info.get("goal", "")
+        profile = classify_search_mode(
+            goal=node.task_info.get("goal", ""),
+            root_question=root_question,
+            task_length=node.task_info.get("length"),
+            forced_mode=forced_mode,
+        )
+        tuned = apply_search_mode_overrides(inner_kwargs, profile, os.environ)
+        logger.info(
+            "Search Mode Dispatch: mode={}, reason={}, scores={}, overrides={}".format(
+                profile.mode,
+                profile.reason,
+                profile.scores,
+                tuned.get("search_mode_overrides", {}),
+            )
+        )
+        return tuned
+
     @overrides
     def forward(self, node, memory, *args, **kwargs) -> str:
         """
@@ -439,6 +560,7 @@ class SimpleExcutor(Agent):
         task_type = node.task_type_tag
         inner_kwargs = node.config[task_type]["execute"]
         if task_type == "RETRIEVAL" and inner_kwargs.get("react_agent", False):
+            inner_kwargs = self._dispatch_search_mode(node, memory, inner_kwargs)
             # Determine whether to use the local knowledge base
             use_kb = os.environ.get("WRITEHERE_USE_KB", "false").lower() == "true"
             kb_name = os.environ.get("WRITEHERE_KB_NAME", "")
@@ -514,6 +636,9 @@ class SimpleExcutor(Agent):
                 summarizer_model=inner_kwargs["summarizer_model"],
                 webpage_helper_max_threads=inner_kwargs["webpage_helper_max_threads"],
                 backend_engine=inner_kwargs["backend_engine"],
+                topk=inner_kwargs.get("topk", 20),
+                pk_quota=inner_kwargs.get("pk_quota", 20),
+                select_quota=inner_kwargs.get("select_quota", 8),
                 cc=inner_kwargs["cc"])]
 
             react_agent = SearchAgent(
@@ -540,7 +665,7 @@ class SimpleExcutor(Agent):
 
             # Pure web search: format results directly (no KB merge)
             llm_result = self._format_search_agent_result(
-                react_agent_result, memory, inner_kwargs)
+                react_agent_result, memory, inner_kwargs, node=node)
 
             # Optional: LLM merge
             if self._should_merge_search_results(inner_kwargs, llm_result):
@@ -814,7 +939,13 @@ class SimpleExcutor(Agent):
                     qvar[:50], e))
 
         if not all_pages:
-            return {"web_pages": [], "result": "", "ori": []}
+            return {
+                "web_pages": [],
+                "result": "",
+                "ori": [],
+                "search_mode": inner_kwargs.get("search_mode", "default"),
+                "search_mode_profile": inner_kwargs.get("search_mode_profile", {}),
+            }
 
         logger.info("KB search: {} unique chunks from {} queries".format(
             len(all_pages), len(query_variants)))
@@ -846,9 +977,13 @@ class SimpleExcutor(Agent):
             )
             for idx, page in enumerate(top_pages, start=memory.global_start_index):
                 page["global_index"] = idx
+            self._annotate_evidence_pages(
+                top_pages, node, "kb", inner_kwargs, sub_question=goal)
             kb_result = {
                 "web_pages": top_pages,
                 "result": "",
+                "search_mode": inner_kwargs.get("search_mode", "default"),
+                "search_mode_profile": inner_kwargs.get("search_mode_profile", {}),
             }
             for page in top_pages:
                 memory.add_search_result(page)
@@ -883,10 +1018,14 @@ class SimpleExcutor(Agent):
         # Re-number global_index sequentially
         for idx, page in enumerate(top_pages, start=memory.global_start_index):
             page["global_index"] = idx
+        self._annotate_evidence_pages(
+            top_pages, node, "kb", inner_kwargs, sub_question=goal)
 
         kb_result = {
             "web_pages": top_pages,
             "result": "",
+            "search_mode": inner_kwargs.get("search_mode", "default"),
+            "search_mode_profile": inner_kwargs.get("search_mode_profile", {}),
         }
 
         # Register results in memory
@@ -1000,7 +1139,9 @@ class SimpleExcutor(Agent):
         execute_result = "\n\n".join(execute_result_parts)
         return {
             "ori": [{"turn": 0, "tool_result": kb_result}],
-            "result": execute_result
+            "result": execute_result,
+            "search_mode": kb_result.get("search_mode", "default"),
+            "search_mode_profile": kb_result.get("search_mode_profile", {}),
         }
 
     def _kb_first_with_web_fallback(
@@ -1028,11 +1169,21 @@ class SimpleExcutor(Agent):
         # Step 2: Quality check with rerank scores
         has_kb = len(kb_result.get("web_pages", [])) > 0
         _, coverage = self._is_kb_sufficient(kb_result)
+        rubric_gap = self._evaluate_rubric_gap(
+            node, kb_result.get("web_pages", []), inner_kwargs)
+        kb_result["rubric_gap"] = rubric_gap
         coverage_threshold = float(
             inner_kwargs.get("kb_web_fallback_coverage_threshold", 0.55))
         force_supplement = str(
             inner_kwargs.get("kb_web_force_supplement", False)
         ).lower() in ("1", "true", "yes", "on")
+        rubric_needs_web = bool(rubric_gap.get("should_supplement_web", False))
+        logger.info(
+            "KB-First: rubric required_coverage={:.2f}, missing={}, preferred_web_missing={}, needs_web={}".format(
+                rubric_gap.get("required_coverage", 0.0),
+                rubric_gap.get("missing_required", []),
+                rubric_gap.get("preferred_web_missing", []),
+                rubric_needs_web))
         logger.info("KB-First: Step 2 – coverage={:.2f}, has_kb={}".format(
             coverage, has_kb))
 
@@ -1050,10 +1201,11 @@ class SimpleExcutor(Agent):
                     to_run_target_write_tasks, to_run_root_question,
                     to_run_outer_write_task)
                 if web_result:
-                    return self._format_search_agent_result(web_result, memory, inner_kwargs)
+                    return self._format_search_agent_result(
+                        web_result, memory, inner_kwargs, node=node)
             return self._format_kb_result(kb_result)
 
-        if coverage >= coverage_threshold and not force_supplement:
+        if coverage >= coverage_threshold and not force_supplement and not rubric_needs_web:
             logger.info(
                 "KB-First: coverage={:.2f} >= threshold={:.2f}; skip web fallback".format(
                     coverage, coverage_threshold))
@@ -1061,6 +1213,10 @@ class SimpleExcutor(Agent):
 
         # Supplement with web search only when KB coverage is insufficient or forced.
         if has_serpapi:
+            supplement_reason = "forced" if force_supplement else (
+                "rubric gap" if rubric_needs_web else "low KB coverage")
+            logger.info("KB-First: web supplement reason={}".format(
+                supplement_reason))
             logger.info(
                 "KB-First: Step 3 - KB coverage={:.2f}, threshold={:.2f}, supplementing with SerpAPI web search".format(
                     coverage, coverage_threshold))
@@ -1154,7 +1310,12 @@ class SimpleExcutor(Agent):
             search_purpose = node.task_info.get("goal", "")
 
             # Build queries
-            queries = self._build_fallback_queries(search_purpose, language)
+            queries = self._build_fallback_queries(
+                search_purpose,
+                language,
+                max_queries=inner_kwargs.get("max_search_queries", 6),
+                search_mode=inner_kwargs.get("search_mode", "default"),
+            )
 
             # Check SerpAPI key
             serpapi_key = os.environ.get("SERPAPI", "")
@@ -1255,6 +1416,9 @@ class SimpleExcutor(Agent):
                     "source_quality_score": round(self._web_source_quality_score(page), 3),
                     "pk_index": idx - global_start + 1,
                 }
+                self._annotate_evidence_pages(
+                    [page_entry], node, "web", inner_kwargs,
+                    sub_question=search_purpose)
                 web_pages.append(page_entry)
 
                 formatted_parts.append(FORMAT_STRING_TEMPLATE.format(
@@ -1280,11 +1444,14 @@ class SimpleExcutor(Agent):
                 "result": [{
                     "web_pages": web_pages,
                     "observation": observation,
+                    "search_mode": inner_kwargs.get("search_mode", "default"),
                 }],
                 "ori": [{"turn": 0, "tool_result": {
                     "web_pages": web_pages,
                     "result": "\n\n".join(formatted_parts),
                     "source": "SerpAPI direct fallback",
+                    "search_mode": inner_kwargs.get("search_mode", "default"),
+                    "search_mode_profile": inner_kwargs.get("search_mode_profile", {}),
                 }}],
             }
 
@@ -1294,7 +1461,9 @@ class SimpleExcutor(Agent):
             logger.error(traceback.format_exc())
             return None
 
-    def _build_fallback_queries(self, search_purpose, language):
+    def _build_fallback_queries(
+        self, search_purpose, language, max_queries=6, search_mode="default"
+    ):
         """Build diverse search queries for the web fallback path.
 
         Generates multiple query variations to maximize the chance of
@@ -1325,14 +1494,58 @@ class SimpleExcutor(Agent):
         if cleaned and cleaned != search_purpose:
             queries.append(cleaned)
 
+        core = cleaned or search_purpose
+        core = re.split(r"[。；;，,\n]", core)[0].strip()[:120] or search_purpose[:120]
+        mode = str(search_mode or "").lower()
+        if mode in ("wide", "deep"):
+            if language == "zh":
+                queries.extend([
+                    "{} 市场 竞品 厂商 对比".format(core),
+                    "{} 趋势 商业机会 市场规模".format(core),
+                ])
+            else:
+                queries.extend([
+                    "{} market competitors vendor comparison".format(core),
+                    "{} trend business opportunity market size".format(core),
+                ])
+        if mode == "deep":
+            if language == "zh":
+                queries.extend([
+                    "{} 架构 实施 挑战 方案".format(core),
+                    "{} 风险 路线图 策略 建议".format(core),
+                ])
+            else:
+                queries.extend([
+                    "{} architecture implementation challenges solution".format(core),
+                    "{} risks roadmap strategy recommendations".format(core),
+                ])
+
+        try:
+            max_queries = max(1, int(max_queries or 6))
+        except Exception:
+            max_queries = 6
+        deduped = []
+        seen = set()
+        for query in queries:
+            query = str(query or "").strip()
+            key = query.lower()
+            if query and key not in seen:
+                seen.add(key)
+                deduped.append(query)
+            if len(deduped) >= max_queries:
+                break
+        queries = deduped
+
         logger.info("Web Fallback: generated {} diverse queries: {}".format(
             len(queries), [q[:80] for q in queries]))
         return queries
 
-    def _format_search_agent_result(self, react_agent_result, memory, inner_kwargs):
+    def _format_search_agent_result(self, react_agent_result, memory, inner_kwargs, node=None):
         """Format raw SearchAgent output into the standard result dict."""
         execute_result = []
         for turn_result in react_agent_result["result"]:
+            self._annotate_evidence_pages(
+                turn_result.get("web_pages", []), node, "web", inner_kwargs)
             for page in turn_result["web_pages"]:
                 memory.add_search_result(page)
                 if not inner_kwargs.get("only_use_react_summary", False):
@@ -1350,7 +1563,9 @@ class SimpleExcutor(Agent):
         execute_result = "\n\n".join(execute_result)
         return {
             "ori": react_agent_result["ori"],
-            "result": execute_result
+            "result": execute_result,
+            "search_mode": inner_kwargs.get("search_mode", "default"),
+            "search_mode_profile": inner_kwargs.get("search_mode_profile", {}),
         }
 
     def _merge_kb_and_web(self, kb_result, react_agent_result, memory, inner_kwargs):
@@ -1409,7 +1624,9 @@ class SimpleExcutor(Agent):
 
         return {
             "ori": merged_ori,
-            "result": execute_result
+            "result": execute_result,
+            "search_mode": inner_kwargs.get("search_mode", "default"),
+            "search_mode_profile": inner_kwargs.get("search_mode_profile", {}),
         }
 
     def search_merge(self, node, memory, search_results, to_run_outer_write_task, *args, **kwargs):

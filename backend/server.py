@@ -796,6 +796,62 @@ def api_get_task_graph(task_id):
         print(f"Error processing nodes.json: {str(e)}")
         return jsonify({"error": f"Failed to read task graph data: {str(e)}"}), 500
 
+@app.route('/api/evidence/<task_id>', methods=['GET'])
+def api_get_task_evidence(task_id):
+    """
+    Get the evidence ledger for a specific task.
+    """
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    if not os.path.isdir(task_dir):
+        return jsonify({"error": "Task not found"}), 404
+
+    evidence_paths = [
+        os.path.join(task_dir, 'records', 'evidence_ledger.json'),
+        os.path.join(RESULTS_DIR, 'records', task_id, 'evidence_ledger.json')
+    ]
+
+    evidence_file = None
+    for path in evidence_paths:
+        if os.path.exists(path):
+            evidence_file = path
+            break
+
+    if not evidence_file:
+        return jsonify({
+            "taskId": task_id,
+            "evidence": [],
+            "summary": {
+                "total": 0,
+                "supported": 0,
+                "kb": 0,
+                "web": 0
+            }
+        })
+
+    try:
+        with open(evidence_file, 'r', encoding='utf-8') as f:
+            evidence = json.load(f)
+
+        supported_labels = {"direct_support", "partial_support"}
+        summary = {
+            "total": len(evidence),
+            "supported": sum(
+                1 for item in evidence
+                if item.get("verify_label") in supported_labels
+            ),
+            "kb": sum(1 for item in evidence if item.get("source_type") == "kb"),
+            "web": sum(1 for item in evidence if item.get("source_type") == "web"),
+        }
+
+        return jsonify({
+            "taskId": task_id,
+            "evidence": evidence,
+            "summary": summary
+        })
+    except Exception as e:
+        print(f"Error processing evidence_ledger.json: {str(e)}")
+        return jsonify({"error": f"Failed to read evidence ledger: {str(e)}"}), 500
+
 @app.route('/api/reload', methods=['POST'])
 def api_reload_tasks():
     """Reload all tasks from the file system"""

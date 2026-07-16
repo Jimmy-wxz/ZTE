@@ -60,6 +60,7 @@ class GraphRunEngine:
         root_node_file = "{}/nodes.pkl".format(folder)
         root_node_json_file = "{}/nodes.json".format(folder)
         article_file = "{}/article.txt".format(folder)
+        evidence_file = "{}/evidence_ledger.json".format(folder)
         with open(root_node_file, "wb") as f:
             pickle.dump(self.root_node, f)
 
@@ -67,6 +68,14 @@ class GraphRunEngine:
             json.dump(self.root_node.to_json(), f, indent=4, ensure_ascii=False)
 
         self.memory.save(folder)
+        if hasattr(self.memory, "evidence_ledger"):
+            with open(evidence_file, "w", encoding="utf-8") as f:
+                json.dump(
+                    self.memory.evidence_ledger.to_list(),
+                    f,
+                    indent=2,
+                    ensure_ascii=False,
+                )
 
         with open(article_file, 'w', encoding='utf-8') as file:
             file.write(self.memory.article)
@@ -597,12 +606,19 @@ def report_writing(input_filename,
                 "execute_retry_limit": int(os.environ.get("WRITEHERE_RETRY_LIMIT", "2")),
                 "merge_retry_limit": int(os.environ.get("WRITEHERE_RETRY_LIMIT", "2")),
                 "search_parse_retry_limit": int(os.environ.get("WRITEHERE_RETRY_LIMIT", "2")),
+                "search_mode_dispatch": os.environ.get("WRITEHERE_SEARCH_MODE_DISPATCH", "1").lower() not in ("0", "false", "no", "off"),
+                "search_mode": os.environ.get("WRITEHERE_SEARCH_MODE", "auto"),
                 "max_search_queries": int(os.environ.get("WRITEHERE_MAX_SEARCH_QUERIES", "6")),
                 "kb_variant_topk": int(os.environ.get("WRITEHERE_KB_VARIANT_TOPK", "4")),
                 "kb_rerank_candidate_limit": int(os.environ.get("WRITEHERE_KB_RERANK_CANDIDATES", "24")),
                 "kb_rerank_cpu_candidates": int(os.environ.get("WRITEHERE_KB_RERANK_CPU_CANDIDATES", "8")),
                 "kb_rerank_mode": os.environ.get("WRITEHERE_KB_RERANK_MODE", "auto"),
                 "kb_final_topk": int(os.environ.get("WRITEHERE_KB_FINAL_TOPK", "5")),
+                "evidence_ledger": os.environ.get("WRITEHERE_EVIDENCE_LEDGER", "1").lower() not in ("0", "false", "no", "off"),
+                "evidence_verify_mode": os.environ.get("WRITEHERE_EVIDENCE_VERIFY_MODE", "heuristic"),
+                "rubric_gap_check": os.environ.get("WRITEHERE_RUBRIC_GAP_CHECK", "1").lower() not in ("0", "false", "no", "off"),
+                "rubric_min_dimension_score": float(os.environ.get("WRITEHERE_RUBRIC_MIN_DIMENSION_SCORE", "0.42")),
+                "rubric_min_supported_pages": int(os.environ.get("WRITEHERE_RUBRIC_MIN_SUPPORTED_PAGES", "2")),
                 "webpage_helper_max_threads": 10, # use requests to download web page
                 "search_max_thread": 4, # serpapi parallel
                 "backend_engine": engine_backend, # google or bing, defined in serpapi

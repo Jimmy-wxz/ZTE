@@ -4,6 +4,7 @@ from collections import defaultdict
 import re
 import threading
 from recursive.cache import Cache
+from recursive.evidence import EvidenceLedger
 
 
 article = ""
@@ -23,6 +24,7 @@ class Memory:
         self.config = config
         self.article = ""
         self.all_search_results = []
+        self.evidence_ledger = EvidenceLedger()
         self.global_start_index = 1
         self._lock = threading.RLock()
         assert self.format in ("xml", "nl")
@@ -32,6 +34,7 @@ class Memory:
         with self._lock:
             page["global_index"] = self.global_start_index
             self.all_search_results.append(page)
+            self.evidence_ledger.register_page(page)
             self.global_start_index += 1
         return page
   
@@ -44,10 +47,11 @@ class Memory:
 
     def save(self, folder):
         import json
-        with open("{}/memory.jsonl".format(folder), "w") as f:
+        with open("{}/memory.jsonl".format(folder), "w", encoding="utf-8") as f:
             f.write(json.dumps({
                 "article": self.article,
-                "all_search_results": self.all_search_results
+                "all_search_results": self.all_search_results,
+                "evidence_ledger": self.evidence_ledger.to_list()
             }, ensure_ascii=False))
 
     def load(self, folder):
