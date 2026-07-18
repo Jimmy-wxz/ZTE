@@ -24,6 +24,12 @@ from recursive.executor.actions.bing_browser import BingBrowser, SerpApiSearch, 
 from recursive.executor.actions.local_knowledge_base import LocalKnowledgeBase
 from recursive.evidence import annotate_page_evidence, evaluate_rubric_gap
 from recursive.search.mode import apply_search_mode_overrides, classify_search_mode
+from recursive.search.query import (
+    build_rubric_gap_queries,
+    extract_relevance_terms,
+    infer_page_source_type,
+    source_type_label,
+)
 from recursive.knowledge_base.embedding import get_reranker
 import re
     
@@ -804,7 +810,7 @@ class SimpleExcutor(Agent):
         )
         return coverage >= 0.30, coverage
 
-    def _fast_kb_candidate_score(self, goal: str, page: dict) -> float:
+    def _legacy_fast_kb_candidate_score(self, goal: str, page: dict) -> float:
         """Cheap pre-rank score before expensive cross-encoder rerank."""
         text = "{}\n{}\n{}\n{}".format(
             page.get("title", ""),
@@ -838,6 +844,59 @@ class SimpleExcutor(Agent):
 
         query = page.get("search_query", "") or ""
         if query and len(query) <= 24 and query in text:
+            score += 1.5
+
+        dist = page.get("distance")
+        if isinstance(dist, (int, float)):
+            score += max(0.0, 2.0 - float(dist)) * 0.5
+
+        try:
+            score += 1.0 / (float(page.get("pk_index", 99)) + 1.0)
+        except Exception:
+            pass
+
+        return score
+
+    def _fast_kb_candidate_score(self, goal: str, page: dict) -> float:
+        """Cheap generic pre-rank score before expensive cross-encoder rerank."""
+        title = page.get("title", "") or ""
+        source = page.get("source", "") or ""
+        query = page.get("search_query", "") or ""
+        summary = page.get("summary", "") or ""
+        text = "{}\n{}\n{}\n{}".format(title, source, query, summary)
+        title_l = title.lower()
+        query_l = query.lower()
+        summary_l = summary.lower()
+        text_l = text.lower()
+        score = 0.0
+
+        terms = extract_relevance_terms(goal)
+        matched_terms = set()
+        for term in terms:
+            term_l = term.lower()
+            if term_l in title_l:
+                score += 1.4
+                matched_terms.add(term_l)
+            if term_l in query_l:
+                score += 0.9
+                matched_terms.add(term_l)
+            if term_l in summary_l:
+                score += 0.55
+                matched_terms.add(term_l)
+
+        if terms:
+            score += 3.0 * (len(matched_terms) / max(len(terms), 1))
+
+        # Keep the former security-topic shortcut as a small optional boost,
+        # not as the main ranking signal.
+        for term in (
+            "IAST", "SAST", "DAST", "SCA", "RASP", "DEVSECOPS",
+            "BSIMM", "APPSecScan", "eBPF",
+        ):
+            if term.upper() in str(goal or "").upper() and term.lower() in text_l:
+                score += 1.0
+
+        if query and len(query) <= 48 and query.lower() in text_l:
             score += 1.5
 
         dist = page.get("distance")
@@ -1199,7 +1258,8 @@ class SimpleExcutor(Agent):
                 web_result = self._do_web_search_fallback(
                     node, memory, inner_kwargs,
                     to_run_target_write_tasks, to_run_root_question,
-                    to_run_outer_write_task)
+                    to_run_outer_write_task,
+                    rubric_gap=rubric_gap)
                 if web_result:
                     return self._format_search_agent_result(
                         web_result, memory, inner_kwargs, node=node)
@@ -1223,7 +1283,8 @@ class SimpleExcutor(Agent):
             web_result = self._do_web_search_fallback(
                 node, memory, inner_kwargs,
                 to_run_target_write_tasks, to_run_root_question,
-                to_run_outer_write_task)
+                to_run_outer_write_task,
+                rubric_gap=rubric_gap)
 
             if web_result and web_result.get("result"):
                 # Check if web result has any pages
@@ -1294,7 +1355,8 @@ class SimpleExcutor(Agent):
 
     def _do_web_search_fallback(
         self, node, memory, inner_kwargs,
-        to_run_target_write_tasks, to_run_root_question, to_run_outer_write_task
+        to_run_target_write_tasks, to_run_root_question, to_run_outer_write_task,
+        rubric_gap=None
     ):
         """Execute a direct SerpAPI web search as fallback when KB is insufficient.
 
@@ -1315,6 +1377,7 @@ class SimpleExcutor(Agent):
                 language,
                 max_queries=inner_kwargs.get("max_search_queries", 6),
                 search_mode=inner_kwargs.get("search_mode", "default"),
+                rubric_gap=rubric_gap,
             )
 
             # Check SerpAPI key
@@ -1462,7 +1525,8 @@ class SimpleExcutor(Agent):
             return None
 
     def _build_fallback_queries(
-        self, search_purpose, language, max_queries=6, search_mode="default"
+        self, search_purpose, language, max_queries=6, search_mode="default",
+        rubric_gap=None
     ):
         """Build diverse search queries for the web fallback path.
 
@@ -1496,6 +1560,7 @@ class SimpleExcutor(Agent):
 
         core = cleaned or search_purpose
         core = re.split(r"[。；;，,\n]", core)[0].strip()[:120] or search_purpose[:120]
+        queries.extend(build_rubric_gap_queries(core, language, rubric_gap))
         mode = str(search_mode or "").lower()
         if mode in ("wide", "deep"):
             if language == "zh":
@@ -1544,14 +1609,16 @@ class SimpleExcutor(Agent):
         """Format raw SearchAgent output into the standard result dict."""
         execute_result = []
         for turn_result in react_agent_result["result"]:
-            self._annotate_evidence_pages(
-                turn_result.get("web_pages", []), node, "web", inner_kwargs)
             for page in turn_result["web_pages"]:
+                page_source_type = infer_page_source_type(
+                    page, turn_result, default="web")
+                self._annotate_evidence_pages(
+                    [page], node, page_source_type, inner_kwargs)
                 memory.add_search_result(page)
                 if not inner_kwargs.get("only_use_react_summary", False):
                     execute_result.append(FORMAT_STRING_TEMPLATE.format(
                         index=page["global_index"],
-                        source_type="Web Search",
+                        source_type=source_type_label(page_source_type),
                         title=page["title"],
                         url=page["url"],
                         publish_time=page["publish_time"],

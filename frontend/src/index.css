@@ -53,6 +53,49 @@ code {
   color: #666;
 }
 
+.markdown-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  margin: 20px 0 24px;
+  border: 1px solid #d8dee4;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.markdown-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  table-layout: auto;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.markdown-table th,
+.markdown-table td {
+  border: 1px solid #d8dee4;
+  padding: 10px 12px;
+  text-align: left;
+  vertical-align: top;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.markdown-table th {
+  background: #f6f8fa;
+  color: #24292f;
+  font-weight: 700;
+}
+
+.markdown-table tbody tr:nth-child(even) {
+  background: #fbfcfd;
+}
+
+.markdown-table tbody tr:hover {
+  background: #f3f7fb;
+}
+
 .task-node {
   cursor: pointer;
   transition: all 0.3s ease;

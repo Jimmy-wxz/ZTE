@@ -25,6 +25,12 @@ import argparse
 from pathlib import Path
 from datetime import datetime
 
+try:
+    from recursive.utils.markdown_tables import normalize_markdown_tables
+except Exception:
+    def normalize_markdown_tables(markdown):
+        return markdown
+
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description='Backend server for WriteHERE application')
 parser.add_argument('--port', type=int, default=5001, help='Port to run the server on')
@@ -116,7 +122,8 @@ def reload_task_storage():
                 try:
                     with open(result_file, 'r') as f:
                         result_data = json.load(f)
-                        task_storage[task_id]["result"] = result_data.get("result", "No result available")
+                        task_storage[task_id]["result"] = normalize_markdown_tables(
+                            result_data.get("result", "No result available"))
                 except Exception as e:
                     print(f"Error loading result file for {task_id}: {str(e)}")
                     task_storage[task_id]["error"] = f"Failed to load output file: {str(e)}"
@@ -547,17 +554,17 @@ def api_get_result(task_id):
             return jsonify({"error": "Task result not available"}), 400
         else:
             with open(result_md_dir, 'r') as f:
-                task["result"] = f.read()
+                task["result"] = normalize_markdown_tables(f.read())
         # Check if the result.md file exists
         if not os.path.exists(result_md_dir):
             return jsonify({"error": "Task result not available"}), 400
         else:
             with open(result_md_dir, 'r') as f:
-                task["result"] = f.read()
+                task["result"] = normalize_markdown_tables(f.read())
     
     return jsonify({
         "taskId": task_id,
-        "result": task.get("result", "No result available"),
+        "result": normalize_markdown_tables(task.get("result", "No result available")),
         "model": task.get("model", "unknown"),
         "searchEngine": task.get("search_engine")
     })

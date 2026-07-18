@@ -22,6 +22,7 @@ import traceback
 from recursive.memory import caches
 from recursive.cache import Cache
 from recursive.utils.get_index import get_report_with_ref
+from recursive.utils.markdown_tables import normalize_markdown_tables
 from datetime import datetime
 
 
@@ -752,6 +753,7 @@ def report_writing(input_filename,
 
 
         result = get_report_with_ref(engine.root_node.to_json(), result)
+        result = normalize_markdown_tables(result)
         item["result"] = result
         output_f.write(json.dumps(item, ensure_ascii=False) + "\n")
         output_f.flush()

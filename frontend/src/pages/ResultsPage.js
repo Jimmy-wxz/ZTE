@@ -20,8 +20,8 @@ import {
   DialogTitle
 } from '@mui/material';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 import LiveTaskList from '../components/LiveTaskList';
+import MarkdownWithTables from '../components/MarkdownWithTables';
 import DownloadIcon from '@mui/icons-material/Download';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { getGenerationStatus, getGenerationResult, getTaskGraph, reloadTasks, stopTask } from '../utils/api';
@@ -588,9 +588,9 @@ const ResultsPage = () => {
               </Alert>
             )}
             <Box className="markdown-content">
-              <ReactMarkdown>
+              <MarkdownWithTables>
                 {result}
-              </ReactMarkdown>
+              </MarkdownWithTables>
             </Box>
           </Paper>
         )}
