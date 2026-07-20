@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
 
 const TABLE_ROW_RE = /^\s*\|.*\|\s*$/;
 const TABLE_SEPARATOR_RE = /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/;
@@ -12,6 +13,27 @@ const splitCells = (line) => {
   if (text.startsWith('|')) text = text.slice(1);
   if (text.endsWith('|')) text = text.slice(0, -1);
   return text.split('|').map((cell) => cell.trim());
+};
+
+const cleanTableCell = (cell) => {
+  return String(cell || '')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/__([^_]+)__/g, '$1');
+};
+
+const linkComponent = ({ href, children }) => (
+  <a href={href} target={href && href.startsWith('#') ? undefined : '_blank'} rel="noreferrer">
+    {children}
+  </a>
+);
+
+const blockMarkdownComponents = {
+  a: linkComponent,
+};
+
+const inlineMarkdownComponents = {
+  a: linkComponent,
+  p: ({ children }) => <>{children}</>,
 };
 
 const normalizePipeTables = (markdown) => {
@@ -94,7 +116,11 @@ const MarkdownTable = ({ table }) => (
       <thead>
         <tr>
           {table.headers.map((header, index) => (
-            <th key={`h-${index}`}>{header}</th>
+            <th key={`h-${index}`}>
+              <ReactMarkdown rehypePlugins={[rehypeRaw]} components={inlineMarkdownComponents}>
+                {cleanTableCell(header)}
+              </ReactMarkdown>
+            </th>
           ))}
         </tr>
       </thead>
@@ -102,7 +128,11 @@ const MarkdownTable = ({ table }) => (
         {table.rows.map((row, rowIndex) => (
           <tr key={`r-${rowIndex}`}>
             {row.map((cell, cellIndex) => (
-              <td key={`c-${rowIndex}-${cellIndex}`}>{cell}</td>
+              <td key={`c-${rowIndex}-${cellIndex}`}>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]} components={inlineMarkdownComponents}>
+                  {cleanTableCell(cell)}
+                </ReactMarkdown>
+              </td>
             ))}
           </tr>
         ))}
@@ -121,7 +151,11 @@ const MarkdownWithTables = ({ children }) => {
           return <MarkdownTable key={`table-${index}`} table={segment.table} />;
         }
         return (
-          <ReactMarkdown key={`markdown-${index}`}>
+          <ReactMarkdown
+            key={`markdown-${index}`}
+            rehypePlugins={[rehypeRaw]}
+            components={blockMarkdownComponents}
+          >
             {segment.content}
           </ReactMarkdown>
         );

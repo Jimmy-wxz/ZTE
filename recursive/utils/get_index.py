@@ -21,8 +21,9 @@ def traverse(data, web_pages):
             traverse(v, web_pages)
 
 import re
-import re
+import os
 from typing import Dict, List, Tuple
+from urllib.parse import unquote
 
 def is_local_kb_url(url: str) -> bool:
     """Check if URL is from local knowledge base."""
@@ -107,6 +108,50 @@ def _source_key(page):
     if is_local_kb_url(url):
         return url.replace("local-kb://", "").replace("kb://", "")
     return url
+
+
+def _kb_source_path(page):
+    url = page.get("url", "") or ""
+    if url.startswith("local-kb://"):
+        source = url.replace("local-kb://", "", 1)
+    elif url.startswith("kb://"):
+        source = url.replace("kb://", "", 1)
+    else:
+        source = url
+    source = unquote(source).split("#", 1)[0].split("?", 1)[0]
+    return source.strip()
+
+
+def _kb_display_title(page):
+    """Return a compact KB display title instead of repeating full paths."""
+    source = _kb_source_path(page)
+    title = str(page.get("title", "") or "").strip()
+    candidate = source or title
+    candidate = candidate.replace("\\", "/")
+    filename = os.path.basename(candidate)
+    if filename:
+        filename = re.sub(r"\.[A-Za-z0-9]{1,8}$", "", filename)
+        return filename or "知识库资料"
+    title = title.replace("Local KB:", "").strip()
+    return title or "知识库资料"
+
+
+def _make_citations_clickable(text, web_pages, kb_pages):
+    """Turn [WEB:N]/[KB:N] labels in the article body into Markdown links."""
+    def replace(match):
+        namespace = match.group(1).upper()
+        index = int(match.group(2))
+        label = "{}:{}".format(namespace, index)
+        if namespace == "WEB":
+            page = web_pages.get(index)
+            url = (page or {}).get("url", "")
+            if url:
+                return "[[{}]]({})".format(label, url)
+        if namespace == "KB" and index in kb_pages:
+            return "[[{}]](#kb-ref-{})".format(label, index)
+        return match.group(0)
+
+    return re.sub(r"(?<!\[)\[(WEB|KB):(\d+)\](?!\])", replace, text)
 
 
 def _remove_duplicate_labels(text):
@@ -235,11 +280,12 @@ def process_citations(text, citation_to_url):
     return updated_text, new_web_citation_to_url, new_kb_citation_to_url
 
 
-def get_report_with_ref(data, article):
+def _legacy_get_report_with_ref(data, article):
     web_pages = {}
     traverse(data, web_pages)
 
     article, web_pages, kb_pages = process_citations(article, web_pages)
+    article = _make_citations_clickable(article, web_pages, kb_pages)
 
     if not web_pages and not kb_pages:
         return article
@@ -268,6 +314,45 @@ def get_report_with_ref(data, article):
                 if len(title) > 100:
                     title = title[:97] + "..."
                 lines.append("- **[KB:{}]** {} - `{}`".format(index, title, source))
+
+    article += "\n".join(lines) + "\n"
+    return article
+
+
+def get_report_with_ref(data, article):
+    web_pages = {}
+    traverse(data, web_pages)
+
+    article, web_pages, kb_pages = process_citations(article, web_pages)
+    article = _make_citations_clickable(article, web_pages, kb_pages)
+
+    if not web_pages and not kb_pages:
+        return article
+
+    lines = ["\n\n---", "\n## 参考资料 (References)"]
+
+    if web_pages:
+        lines.append("\n### 🌐 网络来源")
+        for index, page in sorted(web_pages.items()):
+            title = page.get("title", "无标题")
+            url = page.get("url", "")
+            if len(title) > 100:
+                title = title[:97] + "..."
+            lines.append("1. 🌐 **[WEB:{}]** [{}]({})".format(
+                index, title, url))
+
+    if kb_pages:
+        lines.append("\n### 📚 知识库来源")
+        for index, page in sorted(kb_pages.items()):
+            source = _kb_source_path(page)
+            title = _kb_display_title(page)
+            if len(title) > 100:
+                title = title[:97] + "..."
+            lines.append(
+                "- 📚 <span id=\"kb-ref-{}\"></span>**[KB:{}]** {}".format(
+                    index, index, title))
+            if source:
+                lines.append("  `{}`".format(source))
 
     article += "\n".join(lines) + "\n"
     return article

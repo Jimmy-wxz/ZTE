@@ -59,6 +59,15 @@ class ReportReasoner(PromptTemplate):
 
 请按照 # 要求 中的指示以专业和创新的方式完成分析任务 **{to_run_task}**。您应该按照 # 输出格式 输出，首先在 <thinking> 中思考，然后在 <result></result> 中输出分析结果，在 </result> 之后不要附加任何其他信息。
 """.strip()
+        content_template += """
+
+---
+额外格式约束：
+* 第一章必须是引言、概述或背景说明，不能让最终报告直接从第二章开始。
+* 章节数应与实际写作任务数匹配，禁止把分析大纲过度拆成最终写作无法覆盖的章节。
+* 分析设计只是给 Writer 的结构参考；章节编号必须服务于最终报告的真实顺序。
+* 如需使用表格，表格单元格内禁止使用 Markdown 加粗（**text**），表格内文字应为纯文本。
+"""
         super().__init__(system_message, content_template)
 
 
