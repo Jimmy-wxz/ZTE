@@ -15,12 +15,6 @@ const splitCells = (line) => {
   return text.split('|').map((cell) => cell.trim());
 };
 
-const cleanTableCell = (cell) => {
-  return String(cell || '')
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/__([^_]+)__/g, '$1');
-};
-
 const linkComponent = ({ href, children }) => (
   <a href={href} target={href && href.startsWith('#') ? undefined : '_blank'} rel="noreferrer">
     {children}
@@ -34,6 +28,7 @@ const blockMarkdownComponents = {
 const inlineMarkdownComponents = {
   a: linkComponent,
   p: ({ children }) => <>{children}</>,
+  strong: ({ children }) => <strong>{children}</strong>,
 };
 
 const normalizePipeTables = (markdown) => {
@@ -118,7 +113,7 @@ const MarkdownTable = ({ table }) => (
           {table.headers.map((header, index) => (
             <th key={`h-${index}`}>
               <ReactMarkdown rehypePlugins={[rehypeRaw]} components={inlineMarkdownComponents}>
-                {cleanTableCell(header)}
+                {header}
               </ReactMarkdown>
             </th>
           ))}
@@ -130,7 +125,7 @@ const MarkdownTable = ({ table }) => (
             {row.map((cell, cellIndex) => (
               <td key={`c-${rowIndex}-${cellIndex}`}>
                 <ReactMarkdown rehypePlugins={[rehypeRaw]} components={inlineMarkdownComponents}>
-                  {cleanTableCell(cell)}
+                  {cell}
                 </ReactMarkdown>
               </td>
             ))}

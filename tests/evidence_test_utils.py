@@ -31,3 +31,27 @@ def load_evidence_modules():
         EVIDENCE_DIR / "rubric.py",
     )
     return ledger, rubric
+
+
+def load_evidence_graph_module():
+    if PACKAGE_NAME not in sys.modules:
+        package = types.ModuleType(PACKAGE_NAME)
+        package.__path__ = [str(EVIDENCE_DIR)]
+        sys.modules[PACKAGE_NAME] = package
+
+    return _load_module(
+        f"{PACKAGE_NAME}.graph",
+        EVIDENCE_DIR / "graph.py",
+    )
+
+
+def load_evidence_module(name: str):
+    if PACKAGE_NAME not in sys.modules:
+        package = types.ModuleType(PACKAGE_NAME)
+        package.__path__ = [str(EVIDENCE_DIR)]
+        sys.modules[PACKAGE_NAME] = package
+
+    return _load_module(
+        f"{PACKAGE_NAME}.{name}",
+        EVIDENCE_DIR / f"{name}.py",
+    )

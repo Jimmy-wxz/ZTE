@@ -68,6 +68,15 @@ class ReportReasoner(PromptTemplate):
 * 分析设计只是给 Writer 的结构参考；章节编号必须服务于最终报告的真实顺序。
 * 如需使用表格，表格单元格内禁止使用 Markdown 加粗（**text**），表格内文字应为纯文本。
 """
+        content_template += """
+
+---
+Evidence-grounded analysis constraints:
+* Design the report so the Executive Summary, if present, appears immediately after the title and before the first numbered chapter.
+* Treat cost, budget, ROI, market-size, growth-rate, CVE, 0-day, named vulnerability, and competitor capability statements as high-risk claims: each one must be backed by retrieved evidence, or explicitly labeled as an estimate / needs validation.
+* For competitor benchmarking, identify which claims need Web Search evidence and pass those needs into downstream writing/search tasks.
+* For internal platform status, prefer Local KB evidence and avoid downgrading the platform to "basic" or "to be built" unless the KB actually supports that conclusion.
+"""
         super().__init__(system_message, content_template)
 
 

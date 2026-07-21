@@ -859,6 +859,309 @@ def api_get_task_evidence(task_id):
         print(f"Error processing evidence_ledger.json: {str(e)}")
         return jsonify({"error": f"Failed to read evidence ledger: {str(e)}"}), 500
 
+@app.route('/api/evidence-graph/<task_id>', methods=['GET'])
+def api_get_task_evidence_graph(task_id):
+    """
+    Get the auditable evidence graph for a specific task.
+    """
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    records_dir = os.path.join(RESULTS_DIR, 'records', task_id)
+    if not os.path.isdir(task_dir) and not os.path.isdir(records_dir):
+        return jsonify({"error": "Task not found"}), 404
+
+    graph_paths = [
+        os.path.join(task_dir, 'records', 'evidence_graph.json'),
+        os.path.join(records_dir, 'evidence_graph.json')
+    ]
+
+    graph_file = None
+    for path in graph_paths:
+        if os.path.exists(path):
+            graph_file = path
+            break
+
+    if not graph_file:
+        return jsonify({
+            "taskId": task_id,
+            "graph": {
+                "version": "1.0",
+                "nodes": [],
+                "edges": [],
+                "summary": {
+                    "node_count": 0,
+                    "edge_count": 0,
+                    "evidence_total": 0,
+                    "cited_evidence": 0,
+                    "uncited_evidence": 0,
+                    "rubric_dimension_count": 0,
+                    "rubric_missing": []
+                }
+            }
+        })
+
+    try:
+        with open(graph_file, 'r', encoding='utf-8') as f:
+            graph = json.load(f)
+
+        return jsonify({
+            "taskId": task_id,
+            "graph": graph,
+            "summary": graph.get("summary", {})
+        })
+    except Exception as e:
+        print(f"Error processing evidence_graph.json: {str(e)}")
+        return jsonify({"error": f"Failed to read evidence graph: {str(e)}"}), 500
+
+@app.route('/api/report-audit/<task_id>', methods=['GET'])
+def api_get_task_report_audit(task_id):
+    """
+    Get deterministic report-quality audit results for a specific task.
+    """
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    records_dir = os.path.join(RESULTS_DIR, 'records', task_id)
+    if not os.path.isdir(task_dir) and not os.path.isdir(records_dir):
+        return jsonify({"error": "Task not found"}), 404
+
+    audit_paths = [
+        os.path.join(task_dir, 'records', 'report_quality_audit.json'),
+        os.path.join(records_dir, 'report_quality_audit.json')
+    ]
+
+    audit_file = None
+    for path in audit_paths:
+        if os.path.exists(path):
+            audit_file = path
+            break
+
+    if not audit_file:
+        return jsonify({
+            "taskId": task_id,
+            "audit": {
+                "unsupported_quantitative_claims": [],
+                "unsupported_quantitative_count": 0,
+                "low_citation_sections": [],
+                "low_citation_section_count": 0,
+                "section_citation_metrics": [],
+                "executive_summary_moved": False
+            }
+        })
+
+    try:
+        with open(audit_file, 'r', encoding='utf-8') as f:
+            audit = json.load(f)
+
+        return jsonify({
+            "taskId": task_id,
+            "audit": audit
+        })
+    except Exception as e:
+        print(f"Error processing report_quality_audit.json: {str(e)}")
+        return jsonify({"error": f"Failed to read report audit: {str(e)}"}), 500
+
+@app.route('/api/claim-verification/<task_id>', methods=['GET'])
+def api_get_task_claim_verification(task_id):
+    """
+    Get claim-level verification results for a specific task.
+    """
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    records_dir = os.path.join(RESULTS_DIR, 'records', task_id)
+    if not os.path.isdir(task_dir) and not os.path.isdir(records_dir):
+        return jsonify({"error": "Task not found"}), 404
+
+    verification_paths = [
+        os.path.join(task_dir, 'records', 'claim_verification.json'),
+        os.path.join(records_dir, 'claim_verification.json')
+    ]
+
+    verification_file = None
+    for path in verification_paths:
+        if os.path.exists(path):
+            verification_file = path
+            break
+
+    if not verification_file:
+        return jsonify({
+            "taskId": task_id,
+            "claimVerification": {
+                "version": "1.0",
+                "claims": [],
+                "summary": {
+                    "claim_count": 0,
+                    "unsupported_count": 0,
+                    "needs_review_count": 0
+                },
+                "unsupported_claims": [],
+                "needs_review_claims": []
+            }
+        })
+
+    try:
+        with open(verification_file, 'r', encoding='utf-8') as f:
+            verification = json.load(f)
+
+        return jsonify({
+            "taskId": task_id,
+            "claimVerification": verification,
+            "summary": verification.get("summary", {})
+        })
+    except Exception as e:
+        print(f"Error processing claim_verification.json: {str(e)}")
+        return jsonify({"error": f"Failed to read claim verification: {str(e)}"}), 500
+
+@app.route('/api/writer-feedback/<task_id>', methods=['GET'])
+def api_get_task_writer_feedback(task_id):
+    """
+    Get rubric-guided writer feedback for a specific task.
+    """
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    records_dir = os.path.join(RESULTS_DIR, 'records', task_id)
+    if not os.path.isdir(task_dir) and not os.path.isdir(records_dir):
+        return jsonify({"error": "Task not found"}), 404
+
+    feedback_paths = [
+        os.path.join(task_dir, 'records', 'writer_feedback.json'),
+        os.path.join(records_dir, 'writer_feedback.json')
+    ]
+
+    feedback_file = None
+    for path in feedback_paths:
+        if os.path.exists(path):
+            feedback_file = path
+            break
+
+    if not feedback_file:
+        return jsonify({
+            "taskId": task_id,
+            "writerFeedback": {
+                "version": "1.0",
+                "section_feedback": [],
+                "actions": [],
+                "summary": {
+                    "section_count": 0,
+                    "action_count": 0,
+                    "repair_needed": False
+                }
+            }
+        })
+
+    try:
+        with open(feedback_file, 'r', encoding='utf-8') as f:
+            feedback = json.load(f)
+
+        return jsonify({
+            "taskId": task_id,
+            "writerFeedback": feedback,
+            "summary": feedback.get("summary", {})
+        })
+    except Exception as e:
+        print(f"Error processing writer_feedback.json: {str(e)}")
+        return jsonify({"error": f"Failed to read writer feedback: {str(e)}"}), 500
+
+@app.route('/api/repair-loop/<task_id>', methods=['GET'])
+def api_get_task_repair_loop(task_id):
+    """
+    Get bounded writer repair-loop results for a specific task.
+    """
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    records_dir = os.path.join(RESULTS_DIR, 'records', task_id)
+    if not os.path.isdir(task_dir) and not os.path.isdir(records_dir):
+        return jsonify({"error": "Task not found"}), 404
+
+    repair_paths = [
+        os.path.join(task_dir, 'records', 'repair_loop.json'),
+        os.path.join(records_dir, 'repair_loop.json')
+    ]
+
+    repair_file = None
+    for path in repair_paths:
+        if os.path.exists(path):
+            repair_file = path
+            break
+
+    if not repair_file:
+        return jsonify({
+            "taskId": task_id,
+            "repairLoop": {
+                "version": "1.0",
+                "enabled": False,
+                "attempted_section_count": 0,
+                "repaired_section_count": 0,
+                "repaired_sections": [],
+                "skipped": ["No repair loop artifact found."],
+                "error": ""
+            }
+        })
+
+    try:
+        with open(repair_file, 'r', encoding='utf-8') as f:
+            repair = json.load(f)
+
+        return jsonify({
+            "taskId": task_id,
+            "repairLoop": repair
+        })
+    except Exception as e:
+        print(f"Error processing repair_loop.json: {str(e)}")
+        return jsonify({"error": f"Failed to read repair loop: {str(e)}"}), 500
+
+@app.route('/api/search-repair/<task_id>', methods=['GET'])
+def api_get_task_search_repair(task_id):
+    """
+    Get rubric-guided supplemental search repair results for a specific task.
+    """
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    records_dir = os.path.join(RESULTS_DIR, 'records', task_id)
+    if not os.path.isdir(task_dir) and not os.path.isdir(records_dir):
+        return jsonify({"error": "Task not found"}), 404
+
+    repair_paths = [
+        os.path.join(task_dir, 'records', 'search_repair.json'),
+        os.path.join(records_dir, 'search_repair.json')
+    ]
+
+    repair_file = None
+    for path in repair_paths:
+        if os.path.exists(path):
+            repair_file = path
+            break
+
+    if not repair_file:
+        return jsonify({
+            "taskId": task_id,
+            "searchRepair": {
+                "version": "1.0",
+                "enabled": False,
+                "executed": False,
+                "execute_kb": False,
+                "targets": [],
+                "queries": [],
+                "kb_results": [],
+                "new_evidence_ids": [],
+                "skipped": ["No search repair artifact found."],
+                "error": "",
+                "summary": {
+                    "target_count": 0,
+                    "query_count": 0,
+                    "kb_result_count": 0,
+                    "new_evidence_count": 0,
+                    "executed": False
+                }
+            }
+        })
+
+    try:
+        with open(repair_file, 'r', encoding='utf-8') as f:
+            repair = json.load(f)
+
+        return jsonify({
+            "taskId": task_id,
+            "searchRepair": repair,
+            "summary": repair.get("summary", {})
+        })
+    except Exception as e:
+        print(f"Error processing search_repair.json: {str(e)}")
+        return jsonify({"error": f"Failed to read search repair: {str(e)}"}), 500
+
 @app.route('/api/reload', methods=['POST'])
 def api_reload_tasks():
     """Reload all tasks from the file system"""

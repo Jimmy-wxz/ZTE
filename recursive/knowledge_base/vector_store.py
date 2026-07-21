@@ -1,4 +1,5 @@
 import os
+import re
 from typing import List, Dict, Any, Optional
 
 from loguru import logger
@@ -22,6 +23,50 @@ def _sanitize_collection_name(name: str) -> str:
     if len(safe) > 63:
         safe = safe[:63]
     return safe
+
+
+def _text_signal_ratio(text: str) -> float:
+    value = str(text or "")
+    if not value:
+        return 0.0
+    signal = sum(1 for ch in value if ch.isalnum() or "\u4e00" <= ch <= "\u9fff")
+    return signal / max(len(value), 1)
+
+
+def _looks_low_information(text: str) -> bool:
+    value = str(text or "").strip()
+    if len(value) < 20:
+        return True
+    if _text_signal_ratio(value) < 0.35:
+        return True
+    if re.fullmatch(r"[\W\d_+\-*=/\\|<>\[\]{}().,:;\s]+", value):
+        return True
+    compact = re.sub(r"\s+", "", value)
+    if len(compact) >= 20 and len(set(compact[:80])) <= 6:
+        return True
+    return False
+
+
+def _metadata_text_fallback(meta: Dict[str, Any]) -> str:
+    if not isinstance(meta, dict):
+        return ""
+    candidates = []
+    for key in (
+        "text", "content", "summary", "chunk_text", "page_content",
+        "abstract", "description", "single_title", "title",
+    ):
+        value = meta.get(key)
+        if isinstance(value, str) and value.strip():
+            candidates.append(value.strip())
+    combined = "\n".join(dict.fromkeys(candidates))
+    return combined if combined and not _looks_low_information(combined) else ""
+
+
+def sanitize_retrieved_document(doc: Any, meta: Dict[str, Any]) -> str:
+    text = str(doc or "").strip()
+    if text and not _looks_low_information(text):
+        return text
+    return _metadata_text_fallback(meta)
 
 
 class ChromaVectorStore:
@@ -191,6 +236,7 @@ class ChromaVectorStore:
         docs = results.get("documents", [[]])[0] or []
         metadatas = results.get("metadatas", [[]])[0] or []
         distances = results.get("distances", [[]])[0] or []
+        skipped_low_info = 0
         for doc, meta, distance in zip(docs, metadatas, distances):
             # Apply distance threshold filter if configured
             if distance_threshold is not None and distance > distance_threshold:
@@ -207,8 +253,12 @@ class ChromaVectorStore:
                 title = meta.get("title") or meta.get("single_title") or ""
             else:
                 source, file_path, chunk_index, title = "", "", -1, ""
+            text = sanitize_retrieved_document(doc, meta)
+            if not text:
+                skipped_low_info += 1
+                continue
             output.append({
-                "text": doc,
+                "text": text,
                 "source": source,
                 "file_path": file_path,
                 "chunk_index": chunk_index,
@@ -222,6 +272,9 @@ class ChromaVectorStore:
                 logger.info(
                     "Distance threshold {:.2f}: filtered {} of {} chunks".format(
                         distance_threshold, filtered_count, len(docs)))
+        if skipped_low_info:
+            logger.info("Skipped {} low-information KB chunks after retrieval".format(
+                skipped_low_info))
 
         return output
 

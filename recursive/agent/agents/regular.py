@@ -910,26 +910,31 @@ class SimpleExcutor(Agent):
 
         return score
 
-    def _select_diverse_kb_pages(self, pages, limit):
+    def _select_diverse_kb_pages(self, pages, limit, per_source_limit=1):
         """Keep high-scoring pages while avoiding one source dominating."""
         if limit <= 0:
             return []
+        try:
+            per_source_limit = max(1, int(per_source_limit))
+        except Exception:
+            per_source_limit = 1
         ranked = sorted(
             pages,
             key=lambda p: (
+                -p.get("rerank_score", p.get("fast_kb_score", 0.0)),
                 -p.get("fast_kb_score", 0.0),
                 p.get("distance", 999.0) if p.get("distance") is not None else 999.0,
             ),
         )
 
         selected = []
-        seen_sources = set()
+        source_counts = {}
         for page in ranked:
             source = page.get("source") or page.get("title") or page.get("url")
-            if source in seen_sources:
+            if source_counts.get(source, 0) >= per_source_limit:
                 continue
             selected.append(page)
-            seen_sources.add(source)
+            source_counts[source] = source_counts.get(source, 0) + 1
             if len(selected) >= limit:
                 return selected
 
@@ -969,6 +974,8 @@ class SimpleExcutor(Agent):
         kb_rerank_cpu_candidates = int(
             inner_kwargs.get("kb_rerank_cpu_candidates", 8))
         kb_final_topk = int(inner_kwargs.get("kb_final_topk", 5))
+        kb_diverse_per_source = int(
+            inner_kwargs.get("kb_diverse_per_source", 1))
         kb_rerank_mode = str(
             inner_kwargs.get("kb_rerank_mode", "auto")).lower()
         kb_action = LocalKnowledgeBase(
@@ -1019,13 +1026,15 @@ class SimpleExcutor(Agent):
         ):
             candidate_limit = min(candidate_limit, kb_rerank_cpu_candidates)
         candidate_limit = max(kb_final_topk, candidate_limit)
-        ranked_pages = self._select_diverse_kb_pages(all_pages, candidate_limit)
+        ranked_pages = self._select_diverse_kb_pages(
+            all_pages, candidate_limit, per_source_limit=kb_diverse_per_source)
 
         if kb_rerank_mode in ("0", "false", "off", "none", "fast"):
             for page in ranked_pages:
                 page["rerank_score"] = min(
                     0.95, 0.35 + page.get("fast_kb_score", 0.0) / 10.0)
-            top_pages = self._select_diverse_kb_pages(ranked_pages, kb_final_topk)
+            top_pages = self._select_diverse_kb_pages(
+                ranked_pages, kb_final_topk, per_source_limit=kb_diverse_per_source)
             logger.info(
                 "KB Rerank: mode={} skipped cross-encoder; {} chunks -> top-{} (scores: {})".format(
                     kb_rerank_mode,
@@ -1058,10 +1067,12 @@ class SimpleExcutor(Agent):
                 p["rerank_score"] = s
             # Sort by rerank score descending
             rerank_pages.sort(key=lambda x: x.get("rerank_score", 0), reverse=True)
-            top_pages = rerank_pages[:kb_final_topk]
+            top_pages = self._select_diverse_kb_pages(
+                rerank_pages, kb_final_topk, per_source_limit=kb_diverse_per_source)
             logger.info(
-                "KB Rerank: {} chunks → top-5 (scores: {})".format(
+                "KB Rerank: {} chunks -> top-{} (scores: {})".format(
                     len(rerank_pages),
+                    kb_final_topk,
                     ", ".join("{:.2f}".format(p.get("rerank_score", 0)) for p in top_pages)
                 )
             )
@@ -1072,7 +1083,8 @@ class SimpleExcutor(Agent):
         except Exception as e:
             logger.warning("Rerank failed ({}), falling back to raw top-{}".format(
                 e, kb_final_topk))
-            top_pages = self._select_diverse_kb_pages(ranked_pages, kb_final_topk)
+            top_pages = self._select_diverse_kb_pages(
+                ranked_pages, kb_final_topk, per_source_limit=kb_diverse_per_source)
 
         # Re-number global_index sequentially
         for idx, page in enumerate(top_pages, start=memory.global_start_index):

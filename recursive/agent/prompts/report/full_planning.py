@@ -117,4 +117,12 @@ class ReportPlanning(PromptTemplate):
 需要进一步规划的写作任务，按照之前的要求，按照 # 输出格式 输出，首先在 <thinking> 中思考，然后直接在 <result></result> 中以该格式给出结果，不要忘记递归规划：
 **{to_run_task}**
 """
+        content_template += """
+
+---
+Evidence-grounded report planning constraints:
+* If the report contains an Executive Summary, plan it immediately after the title and before the first numbered chapter.
+* Plan shared search tasks for competitor benchmarking, market data, security incidents, costs, ROI, and named vulnerabilities so downstream writing tasks can cite retrieved evidence.
+* Do not ask writers to produce exact budgets, ROI, market sizes, CVE details, or vendor security capabilities unless a dependent search/analysis task can provide evidence. Otherwise ask writers to mark them as estimates / needs validation.
+"""
         super().__init__(system_message, content_template)

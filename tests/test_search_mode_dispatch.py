@@ -53,7 +53,8 @@ def test_deep_mode_for_strategy_and_research_plan():
 
     assert profile.mode == "deep"
     assert profile.settings["kb_web_force_supplement"] is True
-    assert profile.settings["kb_final_topk"] == 8
+    assert profile.settings["kb_final_topk"] == 10
+    assert profile.settings["kb_diverse_per_source"] == 2
 
 
 def test_forced_mode_and_env_overrides_win():
@@ -70,5 +71,5 @@ def test_forced_mode_and_env_overrides_win():
     assert profile.mode == "deep"
     assert profile.forced is True
     assert tuned["kb_final_topk"] == 5
-    assert tuned["max_search_queries"] == 6
+    assert tuned["max_search_queries"] == 8
     assert tuned["search_mode"] == "deep"

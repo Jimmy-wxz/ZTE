@@ -115,4 +115,15 @@ class ReportWriter(PromptTemplate):
 * 如果「已撰写的报告」为空，说明你是首个 Writer，必须从「一、引言」或「第一章 引言/概述」开始，不要从第二章或后续章节开始。
 * 上游分析设计只是大纲参考；实际章节编号必须反映真实写作顺序，不能因为分析任务提到第二章就跳过第一章。
 """
+        content_template += """
+
+---
+Evidence-grounded writing constraints:
+* If an Executive Summary is needed, put it immediately after the report title and before the first numbered chapter. Never insert it in the middle of the report.
+* Every factual paragraph should contain citations near the claims. For each subsection with factual content, provide at least two citations when sources are available.
+* Every competitor/vendor capability claim must cite Web Search evidence unless it is explicitly describing the internal platform and cites Local KB evidence.
+* Do not invent cost, budget, ROI, market-size, growth-rate, CVE, 0-day, or named vulnerability details. If the retrieved sources do not support a number or event, either remove it or clearly mark it as an estimate / needs validation.
+* In comparison tables, factual cells should include concise citations or say "source not found" / "needs validation"; never present unsupported numeric estimates as facts.
+* Table cells may use Markdown bold like **key point** for short labels, but keep each cell compact and keep the table as a standard pipe table.
+"""
         super().__init__(system_message, content_template)

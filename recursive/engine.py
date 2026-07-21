@@ -21,9 +21,244 @@ from loguru import logger
 import traceback
 from recursive.memory import caches
 from recursive.cache import Cache
+from recursive.evidence.claim_verification import save_claim_verification, verify_report_claims
+from recursive.evidence.graph import build_evidence_graph, save_evidence_graph
+from recursive.evidence.repair_loop import run_writer_repair_loop, save_repair_report
+from recursive.evidence.search_repair import (
+    augment_writer_feedback_with_search_repair,
+    run_search_repair,
+    save_search_repair,
+)
+from recursive.evidence.writer_feedback import build_writer_feedback, save_writer_feedback
 from recursive.utils.get_index import get_report_with_ref
 from recursive.utils.markdown_tables import normalize_markdown_tables
+from recursive.utils.report_quality import postprocess_report_quality, save_report_quality_audit
 from datetime import datetime
+
+
+def _env_bool(name, default=False):
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return str(value).strip().lower() not in ("0", "false", "no", "off", "disable", "disabled")
+
+
+def _root_node_json_with_memory_pages(engine):
+    data = engine.root_node.to_json()
+    try:
+        memory_pages = []
+        for page in getattr(engine.memory, "all_search_results", []) or []:
+            if not (page.get("global_index") and page.get("url") and page.get("title")):
+                continue
+            memory_pages.append(page)
+        if memory_pages:
+            data["_memory_search_results"] = memory_pages
+    except Exception:
+        logger.warning("Failed to attach memory search results to root JSON:\n{}".format(
+            traceback.format_exc()))
+    return data
+
+
+def _save_final_evidence_graph(engine, folder, article):
+    try:
+        graph_data = build_evidence_graph(
+            memory=engine.memory,
+            article=article,
+            root_node_json=_root_node_json_with_memory_pages(engine),
+        )
+        save_evidence_graph("{}/evidence_graph.json".format(folder), graph_data)
+        logger.info(
+            "Evidence graph saved: nodes={}, edges={}".format(
+                graph_data.get("summary", {}).get("node_count", 0),
+                graph_data.get("summary", {}).get("edge_count", 0),
+            )
+        )
+        return graph_data
+    except Exception:
+        logger.warning("Failed to save evidence graph:\n{}".format(traceback.format_exc()))
+        return {}
+
+
+def _postprocess_final_report(result, folder, add_audit_section=True):
+    result, audit = postprocess_report_quality(
+        result, add_audit_section=add_audit_section)
+    try:
+        save_report_quality_audit("{}/report_quality_audit.json".format(folder), audit)
+        logger.info(
+            "Report quality audit saved: unsupported_quantitative={}, low_citation_sections={}".format(
+                audit.get("unsupported_quantitative_count", 0),
+                audit.get("low_citation_section_count", 0),
+            )
+        )
+    except Exception:
+        logger.warning("Failed to save report quality audit:\n{}".format(traceback.format_exc()))
+    return result, audit
+
+
+def _save_claim_verification(
+    engine,
+    folder,
+    article,
+    llm_verifier=False,
+    verifier_model=None,
+    max_llm_claims=6,
+):
+    try:
+        verification = verify_report_claims(
+            article=article,
+            memory=engine.memory,
+            llm_verifier=llm_verifier,
+            verifier_model=verifier_model,
+            max_llm_claims=max_llm_claims,
+        )
+        save_claim_verification("{}/claim_verification.json".format(folder), verification)
+        logger.info(
+            "Claim verification saved: claims={}, unsupported={}, needs_review={}".format(
+                verification.get("summary", {}).get("claim_count", 0),
+                verification.get("summary", {}).get("unsupported_count", 0),
+                verification.get("summary", {}).get("needs_review_count", 0),
+            )
+        )
+        return verification
+    except Exception:
+        logger.warning("Failed to save claim verification:\n{}".format(traceback.format_exc()))
+        return {}
+
+
+def _save_writer_feedback(engine, folder, claim_verification, quality_audit, evidence_graph):
+    try:
+        feedback = build_writer_feedback(
+            claim_verification=claim_verification,
+            quality_audit=quality_audit,
+            evidence_graph=evidence_graph,
+            root_node_json=_root_node_json_with_memory_pages(engine),
+        )
+        save_writer_feedback("{}/writer_feedback.json".format(folder), feedback)
+        logger.info(
+            "Writer feedback saved: actions={}, repair_needed={}".format(
+                feedback.get("summary", {}).get("action_count", 0),
+                feedback.get("summary", {}).get("repair_needed", False),
+            )
+        )
+        return feedback
+    except Exception:
+        logger.warning("Failed to save writer feedback:\n{}".format(traceback.format_exc()))
+        return {}
+
+
+def _run_report_repair_loop(engine, folder, article, writer_feedback, repair_model):
+    try:
+        repaired_article, repair_report = run_writer_repair_loop(
+            article=article,
+            writer_feedback=writer_feedback,
+            memory=engine.memory,
+            model=repair_model,
+            max_sections=int(os.environ.get("WRITEHERE_REPAIR_MAX_SECTIONS", "2")),
+        )
+        save_repair_report("{}/repair_loop.json".format(folder), repair_report)
+        logger.info(
+            "Repair loop saved: attempted={}, repaired={}".format(
+                repair_report.get("attempted_section_count", 0),
+                repair_report.get("repaired_section_count", 0),
+            )
+        )
+        return repaired_article, repair_report
+    except Exception:
+        logger.warning("Failed to run report repair loop:\n{}".format(traceback.format_exc()))
+        return article, {
+            "version": "1.0",
+            "enabled": True,
+            "attempted_section_count": 0,
+            "repaired_section_count": 0,
+            "repaired_sections": [],
+            "skipped": [],
+            "error": traceback.format_exc(),
+        }
+
+
+def _run_search_repair(
+    engine,
+    folder,
+    writer_feedback,
+    root_goal,
+    enabled=True,
+    execute_kb=True,
+):
+    try:
+        if not enabled:
+            report = {
+                "version": "1.0",
+                "enabled": False,
+                "executed": False,
+                "execute_kb": False,
+                "targets": [],
+                "queries": [],
+                "kb_results": [],
+                "new_evidence_ids": [],
+                "skipped": ["Search repair disabled."],
+                "error": "",
+                "summary": {
+                    "target_count": 0,
+                    "query_count": 0,
+                    "kb_result_count": 0,
+                    "new_evidence_count": 0,
+                    "executed": False,
+                },
+            }
+        else:
+            report = run_search_repair(
+                writer_feedback=writer_feedback,
+                root_goal=root_goal,
+                memory=engine.memory,
+                kb_name=os.environ.get(
+                    "WRITEHERE_SEARCH_REPAIR_KB_NAME",
+                    os.environ.get("WRITEHERE_KB_NAME", ""),
+                ),
+                execute_kb=execute_kb,
+                kb_topk=int(os.environ.get("WRITEHERE_SEARCH_REPAIR_TOPK", "3")),
+                max_queries=int(os.environ.get("WRITEHERE_SEARCH_REPAIR_MAX_QUERIES", "6")),
+                max_results=int(os.environ.get("WRITEHERE_SEARCH_REPAIR_MAX_RESULTS", "10")),
+                verify_mode=os.environ.get("WRITEHERE_EVIDENCE_VERIFY_MODE", "heuristic"),
+            )
+        save_search_repair("{}/search_repair.json".format(folder), report)
+        logger.info(
+            "Search repair saved: targets={}, queries={}, new_evidence={}".format(
+                report.get("summary", {}).get("target_count", 0),
+                report.get("summary", {}).get("query_count", 0),
+                report.get("summary", {}).get("new_evidence_count", 0),
+            )
+        )
+        if report.get("new_evidence_ids"):
+            writer_feedback = augment_writer_feedback_with_search_repair(
+                writer_feedback, report)
+            save_writer_feedback("{}/writer_feedback.json".format(folder), writer_feedback)
+        return report, writer_feedback
+    except Exception:
+        logger.warning("Failed to run search repair:\n{}".format(traceback.format_exc()))
+        report = {
+            "version": "1.0",
+            "enabled": enabled,
+            "executed": False,
+            "execute_kb": execute_kb,
+            "targets": [],
+            "queries": [],
+            "kb_results": [],
+            "new_evidence_ids": [],
+            "skipped": [],
+            "error": traceback.format_exc(),
+            "summary": {
+                "target_count": 0,
+                "query_count": 0,
+                "kb_result_count": 0,
+                "new_evidence_count": 0,
+                "executed": False,
+            },
+        }
+        try:
+            save_search_repair("{}/search_repair.json".format(folder), report)
+        except Exception:
+            pass
+        return report, writer_feedback
 
 
 class GraphRunEngine:
@@ -615,6 +850,7 @@ def report_writing(input_filename,
                 "kb_rerank_cpu_candidates": int(os.environ.get("WRITEHERE_KB_RERANK_CPU_CANDIDATES", "8")),
                 "kb_rerank_mode": os.environ.get("WRITEHERE_KB_RERANK_MODE", "auto"),
                 "kb_final_topk": int(os.environ.get("WRITEHERE_KB_FINAL_TOPK", "5")),
+                "kb_diverse_per_source": int(os.environ.get("WRITEHERE_KB_DIVERSE_PER_SOURCE", "1")),
                 "evidence_ledger": os.environ.get("WRITEHERE_EVIDENCE_LEDGER", "1").lower() not in ("0", "false", "no", "off"),
                 "evidence_verify_mode": os.environ.get("WRITEHERE_EVIDENCE_VERIFY_MODE", "heuristic"),
                 "rubric_gap_check": os.environ.get("WRITEHERE_RUBRIC_GAP_CHECK", "1").lower() not in ("0", "false", "no", "off"),
@@ -752,8 +988,87 @@ def report_writing(input_filename,
             continue
 
 
-        result = get_report_with_ref(engine.root_node.to_json(), result)
+        claim_verifier_enabled = _env_bool("WRITEHERE_LLM_CLAIM_VERIFIER", False)
+        claim_verifier_model = os.environ.get(
+            "WRITEHERE_CLAIM_VERIFIER_MODEL", fast_model)
+        max_llm_claims = int(os.environ.get("WRITEHERE_CLAIM_VERIFIER_MAX_CLAIMS", "6"))
+        repair_loop_enabled = _env_bool("WRITEHERE_REPAIR_LOOP", True)
+        repair_model = os.environ.get("WRITEHERE_REPAIR_MODEL", writer_model)
+        search_repair_enabled = _env_bool("WRITEHERE_SEARCH_REPAIR", True)
+        search_repair_execute_kb = _env_bool(
+            "WRITEHERE_SEARCH_REPAIR_EXECUTE_KB", True)
+
+        evidence_graph = _save_final_evidence_graph(engine, folder, result)
+        claim_verification = _save_claim_verification(
+            engine, folder, result,
+            llm_verifier=claim_verifier_enabled,
+            verifier_model=claim_verifier_model,
+            max_llm_claims=max_llm_claims,
+        )
+        draft_result = get_report_with_ref(
+            _root_node_json_with_memory_pages(engine), result)
+        draft_result = normalize_markdown_tables(draft_result)
+        _, quality_audit = _postprocess_final_report(
+            draft_result, folder, add_audit_section=False)
+        writer_feedback = _save_writer_feedback(
+            engine, folder, claim_verification, quality_audit, evidence_graph)
+        search_repair, writer_feedback = _run_search_repair(
+            engine,
+            folder,
+            writer_feedback,
+            root_goal=question,
+            enabled=search_repair_enabled,
+            execute_kb=search_repair_execute_kb,
+        )
+
+        if (
+            repair_loop_enabled
+            and writer_feedback.get("summary", {}).get("repair_needed", False)
+        ):
+            repaired_result, repair_report = _run_report_repair_loop(
+                engine, folder, result, writer_feedback, repair_model)
+            if repair_report.get("repaired_section_count", 0) > 0:
+                result = repaired_result
+                evidence_graph = _save_final_evidence_graph(engine, folder, result)
+                claim_verification = _save_claim_verification(
+                    engine, folder, result,
+                    llm_verifier=claim_verifier_enabled,
+                    verifier_model=claim_verifier_model,
+                    max_llm_claims=max_llm_claims,
+                )
+                draft_result = get_report_with_ref(
+                    _root_node_json_with_memory_pages(engine), result)
+                draft_result = normalize_markdown_tables(draft_result)
+                _, quality_audit = _postprocess_final_report(
+                    draft_result, folder, add_audit_section=False)
+                writer_feedback = _save_writer_feedback(
+                    engine, folder, claim_verification, quality_audit, evidence_graph)
+                if search_repair.get("new_evidence_ids"):
+                    writer_feedback = augment_writer_feedback_with_search_repair(
+                        writer_feedback, search_repair)
+                    save_writer_feedback(
+                        "{}/writer_feedback.json".format(folder), writer_feedback)
+        else:
+            save_repair_report("{}/repair_loop.json".format(folder), {
+                "version": "1.0",
+                "enabled": repair_loop_enabled,
+                "attempted_section_count": 0,
+                "repaired_section_count": 0,
+                "repaired_sections": [],
+                "skipped": ["Repair loop disabled or no repair needed."],
+                "error": "",
+            })
+
+        result = get_report_with_ref(_root_node_json_with_memory_pages(engine), result)
         result = normalize_markdown_tables(result)
+        result, quality_audit = _postprocess_final_report(
+            result, folder, add_audit_section=True)
+        writer_feedback = _save_writer_feedback(
+            engine, folder, claim_verification, quality_audit, evidence_graph)
+        if search_repair.get("new_evidence_ids"):
+            writer_feedback = augment_writer_feedback_with_search_repair(
+                writer_feedback, search_repair)
+            save_writer_feedback("{}/writer_feedback.json".format(folder), writer_feedback)
         item["result"] = result
         output_f.write(json.dumps(item, ensure_ascii=False) + "\n")
         output_f.flush()
