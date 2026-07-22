@@ -19,6 +19,7 @@ import json
 import argparse
 from loguru import logger
 import traceback
+from copy import deepcopy
 from recursive.memory import caches
 from recursive.cache import Cache
 from recursive.evidence.claim_verification import save_claim_verification, verify_report_claims
@@ -30,6 +31,15 @@ from recursive.evidence.search_repair import (
     save_search_repair,
 )
 from recursive.evidence.writer_feedback import build_writer_feedback, save_writer_feedback
+from recursive.policy import (
+    HistoryStore,
+    apply_policy_decision_to_runtime,
+    build_policy_decision,
+    build_policy_outcome,
+    save_policy_decision,
+    save_policy_outcome,
+)
+from recursive.policy.history_store import build_history_record
 from recursive.utils.get_index import get_report_with_ref
 from recursive.utils.markdown_tables import normalize_markdown_tables
 from recursive.utils.report_quality import postprocess_report_quality, save_report_quality_audit
@@ -41,6 +51,128 @@ def _env_bool(name, default=False):
     if value is None:
         return default
     return str(value).strip().lower() not in ("0", "false", "no", "off", "disable", "disabled")
+
+
+def _policy_history_path(root_folder):
+    return os.environ.get(
+        "WRITEHERE_POLICY_HISTORY_PATH",
+        os.path.abspath(os.path.join(root_folder, "..", "policy_history.jsonl")),
+    )
+
+
+def _save_run_policy_decision(
+    folder,
+    question,
+    config,
+    history_store,
+    task_id,
+    engine_backend,
+    item,
+    model_config,
+):
+    try:
+        start_time = time.time()
+        decision = build_policy_decision(
+            prompt=question,
+            config=config,
+            history_store=history_store,
+            task_id=task_id,
+            engine_backend=engine_backend,
+            item=item,
+            model_config=model_config,
+        )
+        save_policy_decision("{}/policy_decision.json".format(folder), decision)
+        logger.info(
+            "Policy decision saved: mode={}, family={}, history_matches={}".format(
+                decision.get("recommendation", {}).get("search_mode"),
+                decision.get("features", {}).get("task_family"),
+                decision.get("history_summary", {}).get("matching_count", 0),
+            )
+        )
+        return decision, time.time() - start_time
+    except Exception:
+        logger.warning("Failed to save policy decision:\n{}".format(traceback.format_exc()))
+        return {}, 0.0
+
+
+def _apply_run_policy_decision(config, folder, decision):
+    try:
+        application = apply_policy_decision_to_runtime(config, decision)
+        save_policy_decision("{}/policy_decision.json".format(folder), decision)
+        logger.info(
+            "Policy application: requested={}, applied={}, settings={}".format(
+                application.get("requested", False),
+                application.get("applied", False),
+                sorted((application.get("applied_settings") or {}).keys()),
+            )
+        )
+        return application
+    except Exception:
+        logger.warning("Failed to apply policy decision:\n{}".format(
+            traceback.format_exc()))
+        return {
+            "requested": False,
+            "applied": False,
+            "applied_settings": {},
+            "skipped_settings": {},
+            "runtime_controls": {},
+            "reason": traceback.format_exc(),
+        }
+
+
+def _save_run_policy_outcome(
+    folder,
+    history_store,
+    task_id,
+    question,
+    decision,
+    result,
+    timing,
+    evidence_graph=None,
+    claim_verification=None,
+    writer_feedback=None,
+    search_repair=None,
+    repair_report=None,
+    quality_audit=None,
+    status="completed",
+    error="",
+):
+    try:
+        outcome = build_policy_outcome(
+            task_id=task_id,
+            prompt=question,
+            decision=decision or {},
+            result=result,
+            timing=timing,
+            evidence_graph=evidence_graph,
+            claim_verification=claim_verification,
+            writer_feedback=writer_feedback,
+            search_repair=search_repair,
+            repair_report=repair_report,
+            quality_audit=quality_audit,
+            status=status,
+            error=error,
+        )
+        save_policy_outcome("{}/policy_outcome.json".format(folder), outcome)
+        if history_store is not None:
+            history_store.append(build_history_record(
+                task_id=task_id,
+                features=(decision or {}).get("features", {}),
+                decision=decision or {},
+                outcome=outcome,
+            ))
+        logger.info(
+            "Policy outcome saved: status={}, quality={}, reward={}, total={:.2f}s".format(
+                status,
+                outcome.get("scores", {}).get("quality_score", 0.0),
+                outcome.get("scores", {}).get("reward", 0.0),
+                outcome.get("timing", {}).get("total_duration_seconds", 0.0),
+            )
+        )
+        return outcome
+    except Exception:
+        logger.warning("Failed to save policy outcome:\n{}".format(traceback.format_exc()))
+        return {}
 
 
 def _root_node_json_with_memory_pages(engine):
@@ -146,14 +278,24 @@ def _save_writer_feedback(engine, folder, claim_verification, quality_audit, evi
         return {}
 
 
-def _run_report_repair_loop(engine, folder, article, writer_feedback, repair_model):
+def _run_report_repair_loop(
+    engine,
+    folder,
+    article,
+    writer_feedback,
+    repair_model,
+    max_sections=None,
+):
     try:
         repaired_article, repair_report = run_writer_repair_loop(
             article=article,
             writer_feedback=writer_feedback,
             memory=engine.memory,
             model=repair_model,
-            max_sections=int(os.environ.get("WRITEHERE_REPAIR_MAX_SECTIONS", "2")),
+            max_sections=int(
+                max_sections
+                if max_sections is not None
+                else os.environ.get("WRITEHERE_REPAIR_MAX_SECTIONS", "2")),
         )
         save_repair_report("{}/repair_loop.json".format(folder), repair_report)
         logger.info(
@@ -691,7 +833,7 @@ def story_writing(input_filename,
             node_type = NodeType.PLAN_NODE
         )
         root_node.node_graph_info["root_node"] = root_node
-        engine = GraphRunEngine(root_node, "xml", config)
+        engine = GraphRunEngine(root_node, "xml", run_config)
         import os
         # qstr = question if len(question) < 40 else question[:40]
         qstr = item["id"]
@@ -945,6 +1087,7 @@ def report_writing(input_filename,
                                  "records")
     caches["search"] = Cache("{}/../cache/{}-{}-search".format(root_folder, start, end)) # cache search and llm result
     caches["llm"] = Cache("{}/../cache/{}-{}-llm".format(root_folder, start, end))
+    policy_history_store = HistoryStore(_policy_history_path(root_folder))
 
     if os.path.exists(output_filename):
         done_ques = [item["prompt"]  for item in read_jsonl(output_filename)]
@@ -955,8 +1098,9 @@ def report_writing(input_filename,
     output_f = open(output_filename, "a", encoding="utf8")
     for item in items:
         question = item["prompt"]
+        run_config = deepcopy(config)
         root_node = RegularDummyNode(
-            config = config,
+            config = run_config,
             nid = "",
             node_graph_info = {
                 "outer_node": None,
@@ -981,12 +1125,56 @@ def report_writing(input_filename,
 
         custom_format = "<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <level>{message}</level>"
         log_id = logger.add("{}/engine.log".format(folder), format=custom_format)
+        policy_decision, policy_decision_seconds = _save_run_policy_decision(
+            folder=folder,
+            question=question,
+            config=run_config,
+            history_store=policy_history_store,
+            task_id=qstr,
+            engine_backend=engine_backend,
+            item=item,
+            model_config={
+                "fast_model": fast_model,
+                "writer_model": writer_model,
+                "reasoner_model": reasoner_model,
+                "search_model": search_model,
+                "merge_model": merge_model,
+            },
+        )
+        policy_application = _apply_run_policy_decision(
+            run_config, folder, policy_decision)
+        run_started_at = time.time()
+        generation_started_at = time.time()
         try:
             result = engine.forward_one_step_untill_done(save_folder=folder, nl=True, nodes_json_file=nodes_json_file)
         except Exception as e:
-            logger.error("Encounter exception: {}\nWhen Process {}".format(traceback.format_exc(), question))
+            error_text = traceback.format_exc()
+            logger.error("Encounter exception: {}\nWhen Process {}".format(error_text, question))
+            _save_run_policy_outcome(
+                folder=folder,
+                history_store=policy_history_store,
+                task_id=qstr,
+                question=question,
+                decision=policy_decision,
+                result="",
+                timing={
+                    "policy_decision_seconds": policy_decision_seconds,
+                    "generation_seconds": time.time() - generation_started_at,
+                    "postprocess_seconds": 0.0,
+                    "total_duration_seconds": time.time() - run_started_at,
+                },
+                status="error",
+                error=error_text,
+            )
+            try:
+                rf.close()
+            except Exception:
+                pass
+            logger.remove(log_id)
             continue
 
+        generation_seconds = time.time() - generation_started_at
+        postprocess_started_at = time.time()
 
         claim_verifier_enabled = _env_bool("WRITEHERE_LLM_CLAIM_VERIFIER", False)
         claim_verifier_model = os.environ.get(
@@ -997,6 +1185,27 @@ def report_writing(input_filename,
         search_repair_enabled = _env_bool("WRITEHERE_SEARCH_REPAIR", True)
         search_repair_execute_kb = _env_bool(
             "WRITEHERE_SEARCH_REPAIR_EXECUTE_KB", True)
+        policy_controls = (
+            (policy_decision.get("runtime_application") or {}).get("runtime_controls") or {}
+            if policy_decision.get("applied_to_runtime")
+            else {}
+        )
+        if policy_controls:
+            if "WRITEHERE_LLM_CLAIM_VERIFIER" not in os.environ:
+                claim_verifier_enabled = bool(
+                    policy_controls.get("enable_claim_verifier", claim_verifier_enabled))
+            if "WRITEHERE_REPAIR_LOOP" not in os.environ:
+                repair_loop_enabled = bool(
+                    policy_controls.get("enable_repair_loop", repair_loop_enabled))
+            if "WRITEHERE_SEARCH_REPAIR" not in os.environ:
+                search_repair_enabled = bool(
+                    policy_controls.get("enable_search_repair", search_repair_enabled))
+        repair_max_sections = int(
+            os.environ.get(
+                "WRITEHERE_REPAIR_MAX_SECTIONS",
+                policy_controls.get("repair_max_sections", 2)
+            )
+        )
 
         evidence_graph = _save_final_evidence_graph(engine, folder, result)
         claim_verification = _save_claim_verification(
@@ -1021,12 +1230,14 @@ def report_writing(input_filename,
             execute_kb=search_repair_execute_kb,
         )
 
+        repair_report = {}
         if (
             repair_loop_enabled
             and writer_feedback.get("summary", {}).get("repair_needed", False)
         ):
             repaired_result, repair_report = _run_report_repair_loop(
-                engine, folder, result, writer_feedback, repair_model)
+                engine, folder, result, writer_feedback, repair_model,
+                max_sections=repair_max_sections)
             if repair_report.get("repaired_section_count", 0) > 0:
                 result = repaired_result
                 evidence_graph = _save_final_evidence_graph(engine, folder, result)
@@ -1049,7 +1260,7 @@ def report_writing(input_filename,
                     save_writer_feedback(
                         "{}/writer_feedback.json".format(folder), writer_feedback)
         else:
-            save_repair_report("{}/repair_loop.json".format(folder), {
+            repair_report = {
                 "version": "1.0",
                 "enabled": repair_loop_enabled,
                 "attempted_section_count": 0,
@@ -1057,7 +1268,8 @@ def report_writing(input_filename,
                 "repaired_sections": [],
                 "skipped": ["Repair loop disabled or no repair needed."],
                 "error": "",
-            })
+            }
+            save_repair_report("{}/repair_loop.json".format(folder), repair_report)
 
         result = get_report_with_ref(_root_node_json_with_memory_pages(engine), result)
         result = normalize_markdown_tables(result)
@@ -1069,6 +1281,28 @@ def report_writing(input_filename,
             writer_feedback = augment_writer_feedback_with_search_repair(
                 writer_feedback, search_repair)
             save_writer_feedback("{}/writer_feedback.json".format(folder), writer_feedback)
+        postprocess_seconds = time.time() - postprocess_started_at
+        _save_run_policy_outcome(
+            folder=folder,
+            history_store=policy_history_store,
+            task_id=qstr,
+            question=question,
+            decision=policy_decision,
+            result=result,
+            timing={
+                "policy_decision_seconds": policy_decision_seconds,
+                "generation_seconds": generation_seconds,
+                "postprocess_seconds": postprocess_seconds,
+                "total_duration_seconds": time.time() - run_started_at,
+            },
+            evidence_graph=evidence_graph,
+            claim_verification=claim_verification,
+            writer_feedback=writer_feedback,
+            search_repair=search_repair,
+            repair_report=repair_report,
+            quality_audit=quality_audit,
+            status="completed",
+        )
         item["result"] = result
         output_f.write(json.dumps(item, ensure_ascii=False) + "\n")
         output_f.flush()

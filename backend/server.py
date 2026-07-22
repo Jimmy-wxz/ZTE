@@ -31,6 +31,27 @@ except Exception:
     def normalize_markdown_tables(markdown):
         return markdown
 
+try:
+    from recursive.followup import (
+        append_followup_history,
+        find_records_dir,
+        list_report_versions,
+        load_followup_artifacts,
+        load_latest_report,
+        run_followup_edit,
+        save_followup_search_repair,
+        save_report_version,
+    )
+except Exception:
+    append_followup_history = None
+    find_records_dir = None
+    list_report_versions = None
+    load_followup_artifacts = None
+    load_latest_report = None
+    run_followup_edit = None
+    save_followup_search_repair = None
+    save_report_version = None
+
 # Parse command-line arguments
 parser = argparse.ArgumentParser(description='Backend server for WriteHERE application')
 parser.add_argument('--port', type=int, default=5001, help='Port to run the server on')
@@ -115,6 +136,14 @@ def reload_task_storage():
                                 engine_backend = run_script.split("--engine-backend ")[1].split(" ")[0]
                                 if engine_backend != "none":
                                     task_storage[task_id]["search_engine"] = engine_backend
+                            kb_match = re.search(
+                                r'export\s+WRITEHERE_KB_NAME=(?:"([^"]*)"|\'([^\']*)\'|([^\s]+))',
+                                run_script,
+                            )
+                            if kb_match:
+                                task_storage[task_id]["knowledge_base_name"] = next(
+                                    value for value in kb_match.groups() if value is not None
+                                )
                     except Exception as e:
                         print(f"Error extracting model info from run.sh for {task_id}: {str(e)}")
                 
@@ -367,7 +396,8 @@ export PYTHONPATH="{project_root}:$PYTHONPATH"
         "status": "running", 
         "start_time": time.time(),
         "model": model,
-        "search_engine": engine_backend if enable_search else None
+        "search_engine": engine_backend if enable_search else None,
+        "knowledge_base_name": knowledge_base_name,
     }
     
     # Start task progress monitoring in a background thread
@@ -568,6 +598,229 @@ def api_get_result(task_id):
         "model": task.get("model", "unknown"),
         "searchEngine": task.get("search_engine")
     })
+
+@app.route('/api/tasks/<task_id>/follow-up', methods=['POST'])
+def api_followup_edit(task_id):
+    """
+    Apply a bounded follow-up edit to an existing report without rerunning the
+    full generation pipeline.
+    """
+    if run_followup_edit is None:
+        return jsonify({"error": "Follow-up editor is not available"}), 500
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    records_dir = find_records_dir(RESULTS_DIR, task_id)
+    if not os.path.isdir(task_dir) and not os.path.isdir(records_dir):
+        return jsonify({"error": "Task not found"}), 404
+
+    payload = request.get_json() or {}
+    instruction = (
+        payload.get("message")
+        or payload.get("instruction")
+        or payload.get("prompt")
+        or ""
+    ).strip()
+    if not instruction:
+        return jsonify({"error": "message is required"}), 400
+
+    model = (
+        payload.get("model")
+        or task_storage.get(task_id, {}).get("model")
+        or os.environ.get("WRITEHERE_FOLLOWUP_MODEL")
+        or os.environ.get("WRITEHERE_WRITER_MODEL")
+        or os.environ.get("WRITEHERE_FAST_MODEL")
+    )
+    max_sections = int(payload.get("maxSections") or payload.get("max_sections") or 1)
+    allow_search_repair = _json_bool(
+        payload.get("allowSearchRepair", payload.get("allow_search_repair", True)),
+        default=True,
+    )
+    search_repair_topk = int(
+        payload.get("searchRepairTopk") or payload.get("search_repair_topk") or 3)
+    search_repair_max_queries = int(
+        payload.get("searchRepairMaxQueries") or payload.get("search_repair_max_queries") or 4)
+    search_repair_max_results = int(
+        payload.get("searchRepairMaxResults") or payload.get("search_repair_max_results") or 6)
+
+    try:
+        _load_task_env(task_dir)
+        _load_task_runtime_env(task_dir)
+        knowledge_base_name = _infer_followup_kb_name(task_id, task_dir, payload)
+        report, records_dir = load_latest_report(RESULTS_DIR, task_id)
+        artifacts = load_followup_artifacts(records_dir)
+        updated_report, edit_record = run_followup_edit(
+            report=report,
+            instruction=instruction,
+            artifacts=artifacts,
+            model=model,
+            max_sections=max_sections,
+            enable_search_repair=allow_search_repair,
+            kb_name=knowledge_base_name,
+            search_repair_topk=search_repair_topk,
+            search_repair_max_queries=search_repair_max_queries,
+            search_repair_max_results=search_repair_max_results,
+        )
+        if save_followup_search_repair is not None:
+            path = save_followup_search_repair(
+                records_dir,
+                edit_record.get("search_repair") or {},
+            )
+            if path:
+                edit_record["search_repair_artifact_path"] = path
+        metadata = save_report_version(
+            records_dir=records_dir,
+            report=updated_report,
+            edit_record=edit_record,
+            task_dir=task_dir if os.path.isdir(task_dir) else None,
+        )
+        if append_followup_history is not None:
+            append_followup_history(RESULTS_DIR, task_id, metadata)
+        task_storage.setdefault(task_id, {
+            "status": "completed",
+            "start_time": time.time(),
+        })
+        task_storage[task_id]["result"] = updated_report
+        task_storage[task_id]["status"] = "completed"
+        task_storage[task_id]["last_followup_version"] = metadata.get("version_id")
+        return jsonify({
+            "taskId": task_id,
+            "versionId": metadata.get("version_id"),
+            "result": updated_report,
+            "followupEdit": metadata,
+        })
+    except Exception as e:
+        return jsonify({"error": f"Follow-up edit failed: {str(e)}"}), 500
+
+@app.route('/api/tasks/<task_id>/versions', methods=['GET'])
+def api_get_report_versions(task_id):
+    if list_report_versions is None:
+        return jsonify({"error": "Follow-up version store is not available"}), 500
+    records_dir = find_records_dir(RESULTS_DIR, task_id)
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    if not os.path.isdir(task_dir) and not os.path.isdir(records_dir):
+        return jsonify({"error": "Task not found"}), 404
+    versions = list_report_versions(records_dir)
+    return jsonify({
+        "taskId": task_id,
+        "versions": versions,
+        "count": len(versions),
+    })
+
+@app.route('/api/tasks/<task_id>/versions/<version_id>', methods=['GET'])
+def api_get_report_version(task_id, version_id):
+    records_dir = find_records_dir(RESULTS_DIR, task_id)
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    if not os.path.isdir(task_dir) and not os.path.isdir(records_dir):
+        return jsonify({"error": "Task not found"}), 404
+    safe_version = re.sub(r"[^A-Za-z0-9_\\-]", "", version_id)
+    version_path = os.path.join(records_dir, "report_versions", safe_version + ".md")
+    metadata_path = os.path.join(records_dir, "report_versions", safe_version + ".json")
+    if not os.path.exists(version_path):
+        return jsonify({"error": "Version not found"}), 404
+    try:
+        with open(version_path, 'r', encoding='utf-8') as f:
+            report = f.read()
+        metadata = {}
+        if os.path.exists(metadata_path):
+            with open(metadata_path, 'r', encoding='utf-8') as f:
+                metadata = json.load(f)
+        return jsonify({
+            "taskId": task_id,
+            "versionId": safe_version,
+            "result": report,
+            "metadata": metadata,
+        })
+    except Exception as e:
+        return jsonify({"error": f"Failed to read version: {str(e)}"}), 500
+
+
+def _load_task_env(task_dir):
+    env_file = os.path.join(task_dir, 'api_key.env')
+    if not os.path.exists(env_file):
+        return
+    try:
+        with open(env_file, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if not line or line.startswith('#') or '=' not in line:
+                    continue
+                key, value = line.split('=', 1)
+                key = key.strip()
+                value = value.strip().strip('"').strip("'")
+                if key and value and key not in os.environ:
+                    os.environ[key] = value
+    except Exception:
+        return
+
+
+def _load_task_runtime_env(task_dir):
+    run_script = os.path.join(task_dir, 'run.sh')
+    if not os.path.exists(run_script):
+        return
+    try:
+        with open(run_script, 'r', encoding='utf-8') as f:
+            content = f.read()
+        for match in re.finditer(
+            r'^\s*export\s+([A-Za-z_][A-Za-z0-9_]*)=(?:"([^"]*)"|\'([^\']*)\'|([^\r\n]+))',
+            content,
+            re.MULTILINE,
+        ):
+            key = match.group(1)
+            if not (
+                key.startswith("WRITEHERE_")
+                or key in {
+                    "HF_HUB_OFFLINE",
+                    "TRANSFORMERS_OFFLINE",
+                    "HF_DATASETS_OFFLINE",
+                    "HF_HUB_DISABLE_TELEMETRY",
+                }
+            ):
+                continue
+            value = next(item for item in match.groups()[1:] if item is not None)
+            value = value.strip().strip('"').strip("'")
+            if key and value and key not in os.environ:
+                os.environ[key] = value
+    except Exception:
+        return
+
+
+def _infer_followup_kb_name(task_id, task_dir, payload):
+    for value in (
+        payload.get("knowledgeBaseName"),
+        payload.get("knowledge_base_name"),
+        task_storage.get(task_id, {}).get("knowledge_base_name"),
+        os.environ.get("WRITEHERE_KB_NAME"),
+    ):
+        if value and isinstance(value, str):
+            return value.strip()
+    run_script = os.path.join(task_dir, 'run.sh')
+    if os.path.exists(run_script):
+        try:
+            with open(run_script, 'r', encoding='utf-8') as f:
+                content = f.read()
+            match = re.search(
+                r'export\s+WRITEHERE_KB_NAME=(?:"([^"]*)"|\'([^\']*)\'|([^\s]+))',
+                content,
+            )
+            if match:
+                return next(item for item in match.groups() if item is not None).strip()
+        except Exception:
+            return ""
+    return ""
+
+
+def _json_bool(value, default=False):
+    if value is None:
+        return default
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return bool(value)
+    text = str(value).strip().lower()
+    if text in ("1", "true", "yes", "on"):
+        return True
+    if text in ("0", "false", "no", "off"):
+        return False
+    return default
 
 
 def transform_node_to_graph(node, seen_nodes=None, root=False):
@@ -1161,6 +1414,87 @@ def api_get_task_search_repair(task_id):
     except Exception as e:
         print(f"Error processing search_repair.json: {str(e)}")
         return jsonify({"error": f"Failed to read search repair: {str(e)}"}), 500
+
+@app.route('/api/policy/<task_id>', methods=['GET'])
+def api_get_task_policy(task_id):
+    """
+    Get adaptive policy decision and outcome artifacts for a specific task.
+    """
+    task_dir = os.path.join(RESULTS_DIR, task_id)
+    records_dir = os.path.join(RESULTS_DIR, 'records', task_id)
+    if not os.path.isdir(task_dir) and not os.path.isdir(records_dir):
+        return jsonify({"error": "Task not found"}), 404
+
+    decision = _load_policy_artifact(task_id, 'policy_decision.json')
+    outcome = _load_policy_artifact(task_id, 'policy_outcome.json')
+    return jsonify({
+        "taskId": task_id,
+        "policyDecision": decision or {
+            "version": "1.0",
+            "recommendation": {},
+            "history_summary": {},
+            "applied_to_runtime": False,
+        },
+        "policyOutcome": outcome or {
+            "version": "1.0",
+            "status": "missing",
+            "timing": {},
+            "quality": {},
+            "scores": {},
+        }
+    })
+
+@app.route('/api/policy-history', methods=['GET'])
+def api_get_policy_history():
+    """
+    Get recent adaptive policy history records.
+    """
+    try:
+        limit = int(request.args.get('limit', 50))
+    except Exception:
+        limit = 50
+    limit = max(1, min(limit, 500))
+    history_path = os.environ.get(
+        "WRITEHERE_POLICY_HISTORY_PATH",
+        os.path.join(RESULTS_DIR, 'policy_history.jsonl')
+    )
+    if not os.path.exists(history_path):
+        return jsonify({
+            "historyPath": history_path,
+            "records": [],
+            "count": 0
+        })
+    records = []
+    try:
+        with open(history_path, 'r', encoding='utf-8') as f:
+            lines = f.readlines()[-limit:]
+        for line in lines:
+            try:
+                records.append(json.loads(line))
+            except Exception:
+                continue
+        return jsonify({
+            "historyPath": history_path,
+            "records": records,
+            "count": len(records)
+        })
+    except Exception as e:
+        return jsonify({"error": f"Failed to read policy history: {str(e)}"}), 500
+
+def _load_policy_artifact(task_id, filename):
+    paths = [
+        os.path.join(RESULTS_DIR, task_id, 'records', filename),
+        os.path.join(RESULTS_DIR, 'records', task_id, filename)
+    ]
+    for path in paths:
+        if not os.path.exists(path):
+            continue
+        try:
+            with open(path, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception:
+            return None
+    return None
 
 @app.route('/api/reload', methods=['POST'])
 def api_reload_tasks():
